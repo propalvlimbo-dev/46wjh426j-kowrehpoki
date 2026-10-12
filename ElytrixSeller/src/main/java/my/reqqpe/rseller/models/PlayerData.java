@@ -1,0 +1,62 @@
+package my.reqqpe.rseller.models;
+
+import com.google.gson.Gson;
+import lombok.Data;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+@Data
+public class PlayerData {
+    private static final Gson GSON = new Gson();
+
+    private final UUID uuid;
+    private double points = 0;
+    private Map<String, Boolean> autosellMap = new HashMap<>();
+    private boolean autosellMessage = true;
+
+    public Player toPlayer() {
+        return Bukkit.getPlayer(uuid);
+    }
+
+    public void addPoints(double p) {
+        this.points += p;
+    }
+
+    public void removePoints(double p) {
+        this.points -= p;
+    }
+
+    public void setAutosell(String id, boolean enabled) {
+        autosellMap.put(id, enabled);
+    }
+
+    public void removeAutosell(String id) {
+        autosellMap.remove(id);
+    }
+
+    public boolean isAutosell(String id) {
+        return autosellMap.getOrDefault(id, false);
+    }
+
+    public String serializeAutosell() {
+        return GSON.toJson(autosellMap);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void deserializeAutosell(String json) {
+        if (json == null || json.isEmpty()) return;
+        autosellMap = GSON.fromJson(json, Map.class);
+    }
+
+    public boolean hasEnabledAutosell() {
+        return autosellMap.values().stream().anyMatch(b -> b);
+    }
+
+    public void toggleAutosellMessage() {
+        autosellMessage = !autosellMessage;
+    }
+}
