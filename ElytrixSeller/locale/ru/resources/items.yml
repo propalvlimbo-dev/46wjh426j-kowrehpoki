@@ -666,7 +666,7 @@ items:
 
   # ────────────────────────────────────
   # Еда и блоки
-  # ────────────────────────────────────
+  # ───────────────────────────────────
   BREAD:
     price: 5
     points: 0.1
@@ -683,6 +683,10 @@ items:
     price: 3
     points: 0.06
     name: "&#F8BEFBКартофель"
+  BAKED_POTATO:
+    price: 6
+    points: 0.12
+    name: "&#F8BEFBПечёный картофель"
   BEETROOT:
     price: 3
     points: 0.06
@@ -723,6 +727,70 @@ items:
     price: 12
     points: 0.3
     name: "&#F8BEFBРагу из кролика"
+  BEEF:
+    price: 6
+    points: 0.12
+    name: "&#F8BEFBСырая говядина"
+  COOKED_BEEF:
+    price: 10
+    points: 0.2
+    name: "&#F8BEFBСтейк"
+  PORKCHOP:
+    price: 6
+    points: 0.12
+    name: "&#F8BEFBСырая свинина"
+  COOKED_PORKCHOP:
+    price: 10
+    points: 0.2
+    name: "&#F8BEFBЖареная свинина"
+  CHICKEN:
+    price: 6
+    points: 0.12
+    name: "&#F8BEFBСырая курятина"
+  COOKED_CHICKEN:
+    price: 10
+    points: 0.2
+    name: "&#F8BEFBЖареная курятина"
+  MUTTON:
+    price: 6
+    points: 0.12
+    name: "&#F8BEFBСырая баранина"
+  COOKED_MUTTON:
+    price: 10
+    points: 0.2
+    name: "&#F8BEFBЖареная баранина"
+  RABBIT:
+    price: 6
+    points: 0.12
+    name: "&#F8BEFBСырая крольчатина"
+  COOKED_RABBIT:
+    price: 10
+    points: 0.2
+    name: "&#F8BEFBЖареная крольчатина"
+  COD:
+    price: 5
+    points: 0.1
+    name: "&#F8BEFBСырая треска"
+  COOKED_COD:
+    price: 8
+    points: 0.16
+    name: "&#F8BEFBЖареная треска"
+  SALMON:
+    price: 6
+    points: 0.12
+    name: "&#F8BEFBСырой лосось"
+  COOKED_SALMON:
+    price: 10
+    points: 0.2
+    name: "&#F8BEFBЖареный лосось"
+  TROPICAL_FISH:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBТропическая рыба"
+  PUFFERFISH:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBИглобрюх"
 
   # ────────────────────────────────────
   # Рудные блоки и минералы

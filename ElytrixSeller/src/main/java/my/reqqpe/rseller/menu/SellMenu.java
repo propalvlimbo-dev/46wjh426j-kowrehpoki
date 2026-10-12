@@ -118,28 +118,29 @@ public class SellMenu extends AbstractMenu implements Listener {
         int rawSlot = e.getRawSlot();
 
         if (specialSlots.contains(rawSlot)) {
-            ItemStack cursor = e.getCursor();
-            ItemStack current = e.getCurrentItem();
-            boolean hasCursor = cursor != null && cursor.getType() != Material.AIR;
-            boolean hasCurrent = current != null && current.getType() != Material.AIR;
-
-            // Allow placing items into empty special slots only if item is registered
-            if (hasCursor && !hasCurrent && !e.isShiftClick()) {
-                if (plugin.getItemManager().search(cursor) == null) {
-                    // Item not registered - block placement
-                    e.setCancelled(true);
-                } else {
-                    // Item registered - allow placement
-                    e.setCancelled(false);
-                }
-            } else {
-                // Block all other interactions (taking, swapping, shift-click from menu)
-                e.setCancelled(true);
-            }
+            // Block ALL interactions with special slots to prevent item extraction
+            e.setCancelled(true);
             return true;
         }
 
         return false;
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player player)) return;
+        if (!(e.getInventory().getHolder() instanceof CustomInventoryHolder holder)) return;
+        if (!holder.id().equals(getMenuId())) return;
+
+        // Block shift-click from player inventory to special slots if item is not registered
+        if (e.isShiftClick() && e.getClickedInventory() == player.getInventory()) {
+            ItemStack item = e.getCurrentItem();
+            if (item != null && item.getType() != Material.AIR) {
+                if (plugin.getItemManager().search(item) == null) {
+                    e.setCancelled(true);
+                }
+            }
+        }
     }
 
 

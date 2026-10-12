@@ -69,8 +69,9 @@ public abstract class AbstractMenu {
     public void openMenu(Player player) {
         this.guiConfig = getGuiConfig();
 
-        String title = Colorizer.color(guiConfig.getString("title", "ElytrixSeller"));
+        String title = guiConfig.getString("title", "ElytrixSeller");
         title = replaceTitlePlaceholders(player, title);
+        title = Colorizer.color(title);
         int size = guiConfig.getInt("size", 54);
         if (size % 9 != 0 || size < 9 || size > 54) {
             size = 54;
