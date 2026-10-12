@@ -24,6 +24,16 @@ public class AutoSellCategoryMenu extends AbstractMenu {
     }
 
     @Override
+    protected String replaceTitlePlaceholders(Player player, String title) {
+        String currentCategoryId = AutoSellMenu.getPlayerCategory(player.getUniqueId());
+        if (currentCategoryId != null) {
+            String currentCategoryName = plugin.getAutoSellManager().getCategoryName(currentCategoryId);
+            title = title.replace("{current_category}", currentCategoryName);
+        }
+        return super.replaceTitlePlaceholders(player, title);
+    }
+
+    @Override
     protected void executeAction(Player player, String action) {
         String actionLower = action.toLowerCase().trim();
 

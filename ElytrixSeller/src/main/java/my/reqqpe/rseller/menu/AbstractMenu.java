@@ -70,6 +70,7 @@ public abstract class AbstractMenu {
         this.guiConfig = getGuiConfig();
 
         String title = Colorizer.color(guiConfig.getString("title", "ElytrixSeller"));
+        title = replaceTitlePlaceholders(player, title);
         int size = guiConfig.getInt("size", 54);
         if (size % 9 != 0 || size < 9 || size > 54) {
             size = 54;
@@ -493,6 +494,10 @@ public abstract class AbstractMenu {
 
     protected void onAnimationComplete(Player player, Inventory inv) {
         // Override in subclasses to run logic after animation finishes
+    }
+
+    protected String replaceTitlePlaceholders(Player player, String title) {
+        return PlaceholderAPI.setPlaceholders(player, title);
     }
 
 

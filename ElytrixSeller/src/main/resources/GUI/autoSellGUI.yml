@@ -37,21 +37,6 @@ items:
     right_click_actions:
       - '[open_category] mobs'
 
-  category_misc:
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjE1NmNiOTI3ZWExOTZkNDUyMjcwZWI1OGQ1Y2Y2MTJmNDlhMzQ2NTQwMjRhZmNjN2M3M2MyYjgxODg4M2YifX19
-    name: "&7« &#F8BEFBРазное &7»"
-    slot: 15
-    lore:
-      - '&#F8BEFB&l '
-      - '&#F8BEFB&l┃ &fРедкий лут'
-      - '&#F8BEFB&l┃ &fАртефакты и боссы'
-      - '&#F8BEFB&l┃ '
-      - '&7● &fНажмите для перехода'
-    left_click_actions:
-      - '[open_category] misc'
-    right_click_actions:
-      - '[open_category] misc'
-
   disable_all:
     material: BARRIER
     name: "&7« &cОтключить всё &7»"

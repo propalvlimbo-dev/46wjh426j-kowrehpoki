@@ -64,6 +64,13 @@ public class AutoSellMenu extends AbstractMenu implements Listener {
         return plugin.getAutoSellItemsGUIConfig().getConfig();
     }
 
+    @Override
+    protected String replaceTitlePlaceholders(Player player, String title) {
+        String currentCategoryId = playerCategory.getOrDefault(player.getUniqueId(), autoSellManager.getFirstCategory());
+        String currentCategoryName = autoSellManager.getCategoryName(currentCategoryId);
+        title = title.replace("{current_category}", currentCategoryName);
+        return super.replaceTitlePlaceholders(player, title);
+    }
 
     public void openMenu(Player player) {
         if (!player.hasPermission("rSeller.autosell")) {
@@ -239,6 +246,10 @@ public class AutoSellMenu extends AbstractMenu implements Listener {
 
     public static void setPlayerCategory(UUID uuid, String category) {
         playerCategory.put(uuid, category);
+    }
+
+    public static String getPlayerCategory(UUID uuid) {
+        return playerCategory.get(uuid);
     }
 
     public static void setPlayerPage(UUID uuid, String category, int page) {

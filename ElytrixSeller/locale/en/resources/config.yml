@@ -26,10 +26,6 @@ autosell:
     - spawn
   start_category: ores
   categories:
-    all:
-      name: "&#F8BEFBAll Items"
-      items:
-        - all
     ores:
       name: "&#F8BEFBOres"
       items:
@@ -39,36 +35,13 @@ autosell:
         - GLOWSTONE_DUST
         - QUARTZ
         - IRON_INGOT
-        - IRON_BLOCK
         - GOLD_INGOT
-        - GOLD_BLOCK
+        - COPPER_INGOT
         - DIAMOND
-        - DIAMOND_BLOCK
         - EMERALD
-        - EMERALD_BLOCK
-        - LAPIS_BLOCK
-        - REDSTONE_BLOCK
-        - COAL_BLOCK
         - NETHERITE_INGOT
         - NETHERITE_SCRAP
         - ANCIENT_DEBRIS
-        - OBSIDIAN
-        - CRYING_OBSIDIAN
-        - COBBLESTONE
-        - ANDESITE
-        - DIORITE
-        - GRANITE
-        - SAND
-        - RED_SAND
-        - CLAY_BALL
-        - GRAVEL
-        - BLACKSTONE
-        - BASALT
-        - NETHER_BRICK
-        - END_STONE
-        - GLASS_BOTTLE
-        - SUGAR
-        - STICK
     mobs:
       name: "&#F8BEFBMobs"
       items:
@@ -112,16 +85,6 @@ autosell:
         - SPONGE
         - HEART_OF_THE_SEA
         - NAUTILUS_SHELL
-    misc:
-      name: "&#F8BEFBMisc"
-      items:
-        - NETHER_STAR
-        - DRAGON_EGG
-        - DRAGON_BREATH
-        - ELYTRA
-        - GOLDEN_APPLE
-        - ENCHANTED_GOLDEN_APPLE
-        - SADDLE
 
 numbers_format:
   placeholders:
