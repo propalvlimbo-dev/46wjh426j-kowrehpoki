@@ -1,70 +1,151 @@
-#                 .__               .__
-# _______  ______ |  |  __ __  ____ |__| ____   ______
-# \_  __ \ \____ \|  | |  |  \/ ___\|  |/    \ /  ___/
-#  |  | \/ |  |_> >  |_|  |  / /_/  >  |   |  \\___ \
-#  |__|    |   __/|____/____/\___  /|__|___|  /____  >
-#          |__|             /_____/         \/     \/
-#
-
-# Need help or want to stay updated and suggest ideas for future updates?
-# Plugin Wiki: https://reqqpe.gitbook.io/rseller
-# Discord: https://dsc.gg/rplugins
-
-# Which menu should the /<buyer|seller|sell> command open?
-sell-command: "mainGUI" # Same names as GUI files (allSellGUI, mainGUI, autoSellGUI)
+sell-command: "mainGUI"
 
 metrics: true
 update-check: true
 
 economy:
-  type: VAULT # VAULT, COINSENGINE or PLAYERPOINTS
+  type: VAULT
   coinsengine:
     currency-name: money
 
-registered-menus: # file names without .yml
+registered-menus:
   - mainGUI
 
-# Triggered when an item is picked up; only the picked-up item is sold
 autosell:
-  enable: true # Changes take effect only after a server restart/reload
-  message-settings: # How messages will be sent
-    # Changes take effect only after a server restart/reload
-    type: sell # sell (on sale) or task (periodically)
-    send-type: message # message, actionbar
-    task-delay: 5 # in seconds (used if type = task)
+  enable: true
+  message-settings:
+    type: sell
+    send-type: actionbar
+    task-delay: 5
   settings:
-    # Changes take effect only after a server restart/reload
-    type: pickup # pickup (on item pickup) or task (checks each player periodically)
-    sell-inventory: false # sell inventory or only the picked-up item (used if type = pickup)
-    task-delay: 5 # in seconds (used if type = task)
-  type-list: false # false = world blacklist, true = world whitelist
-  worlds-list: # World list configured by type-list
+    type: pickup
+    sell-inventory: false
+    task-delay: 5
+  type-list: false
+  worlds-list:
     - spawn
-  start_category: example # Category opened on first use
+  start_category: ores
   categories:
     all:
-      name: "All Items"
+      name: "&#F8BEFBAll Items"
       items:
         - all
-    example:
-      name: "Resources"
+    ores:
+      name: "&#F8BEFBOres"
       items:
         - COAL
+        - RAW_COAL
         - LAPIS_LAZULI
+        - REDSTONE
+        - GLOWSTONE_DUST
+        - QUARTZ
+        - AMETHYST_SHARD
         - IRON_INGOT
+        - RAW_IRON
         - GOLD_INGOT
+        - RAW_GOLD
+        - COPPER_INGOT
+        - RAW_COPPER
         - DIAMOND
         - EMERALD
         - NETHERITE_INGOT
+        - NETHERITE_SCRAP
+        - ANCIENT_DEBRIS
+        - OBSIDIAN
+        - CRYING_OBSIDIAN
+        - COAL_BLOCK
+        - IRON_BLOCK
+        - GOLD_BLOCK
+        - DIAMOND_BLOCK
+        - EMERALD_BLOCK
+        - LAPIS_BLOCK
+        - REDSTONE_BLOCK
+        - COPPER_BLOCK
+        - NETHERITE_BLOCK
+        - AMETHYST_BLOCK
+        - COBBLESTONE
+        - ANDESITE
+        - DIORITE
+        - GRANITE
+        - DEEPSLATE
+        - COBBLED_DEEPSLATE
+        - SAND
+        - RED_SAND
+        - CLAY_BALL
+        - GRAVEL
+        - BLACKSTONE
+        - BASALT
+        - CALCITE
+        - TUFF
+        - POINTED_DRIPSTONE
+        - NETHER_BRICK
+        - END_STONE
+    mobs:
+      name: "&#F8BEFBMobs"
+      items:
+        - ROTTEN_FLESH
+        - BONE
+        - ARROW
+        - GUNPOWDER
+        - STRING
+        - SPIDER_EYE
+        - ENDER_PEARL
+        - BLAZE_ROD
+        - BLAZE_POWDER
+        - MAGMA_CREAM
+        - SLIME_BALL
+        - PHANTOM_MEMBRANE
+        - PRISMARINE_SHARD
+        - PRISMARINE_CRYSTALS
+        - SHULKER_SHELL
+        - ECHO_SHARD
+        - DISC_FRAGMENT_5
+        - SCULK_CATALYST
+        - GHAST_TEAR
+        - LEATHER
+        - BEEF
+        - PORKCHOP
+        - MUTTON
+        - WHITE_WOOL
+        - FEATHER
+        - CHICKEN
+        - EGG
+        - RABBIT
+        - RABBIT_HIDE
+        - INK_SAC
+        - GLOW_INK_SAC
+        - HONEYCOMB
+        - SCUTE
+        - TOTEM_OF_UNDYING
+        - WITHER_SKELETON_SKULL
+        - SKELETON_SKULL
+        - ZOMBIE_HEAD
+        - CREEPER_HEAD
+        - DRAGON_HEAD
+        - PIGLIN_HEAD
+        - BREEZE_ROD
+        - WIND_CHARGE
+    misc:
+      name: "&#F8BEFBMisc"
+      items:
+        - NETHER_STAR
+        - DRAGON_EGG
+        - DRAGON_BREATH
+        - ELYTRA
+        - HEART_OF_THE_SEA
+        - NAUTILUS_SHELL
+        - TRIDENT
+        - SPONGE
+        - RABBIT_FOOT
+        - HEAVY_CORE
+        - MACE
+        - OMINOUS_TRIAL_KEY
+        - TRIAL_KEY
+        - SADDLE
+        - GOLDEN_APPLE
+        - ENCHANTED_GOLDEN_APPLE
 
 numbers_format:
-  # Number format: %.Nf where N is the number of decimal places
-  # Add ~ at the end to trim trailing zeros:
-  # 20.00 -> 20, 20.10 -> 20.1
-  # Examples:
-  # "%.2f" -> 20.00
-  # "%.2f~" -> 20
-  # "%.1f~" -> 20.5
   placeholders:
     points: "%.2f~"
     points_needed: "%.2f~"
@@ -81,40 +162,24 @@ numbers_format:
     points: "%.2f~"
     coins: "%.2f~"
 
-# Permission-based boosters: rseller.booster.<key>
 boosters:
-
-  # Note: if you use something like donate.vip,
-  # the configuration will be invalid (YAML limitation).
-  # Also, if a player has all permissions,
-  # they automatically get all boosters as well.
-
-  donate: # Permission: rseller.booster.donate
-    coin-multiplier: 2.0 # Defaults to 1.0 if not specified
-    point-multiplier: 2.0 # Defaults to 1.0 if not specified
-
-  booster-coin: # Permission: rseller.booster.booster-coin
+  elytrix:
+    coin-multiplier: 3.0
+    point-multiplier: 3.0
+  vip:
+    coin-multiplier: 2.0
+    point-multiplier: 2.0
+  premium:
     coin-multiplier: 1.5
-
-  booster-point: # Permission: rseller.booster.booster-point
     point-multiplier: 1.5
 
-# Sounds played during selling events
-# Leave a sound name empty ("") to disable it
-# Full sound list:
-# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
 sounds:
-  # Sound played on successful menu sale
   sell: "ENTITY_EXPERIENCE_ORB_PICKUP"
   sell-volume: 1.0
   sell-pitch: 1.0
-
-  # Sound played on auto-sell
   autosell: "ENTITY_EXPERIENCE_ORB_PICKUP"
   autosell-volume: 1.0
   autosell-pitch: 1.2
-
-  # Sound played when there is nothing to sell
   no-sell: "BLOCK_NOTE_BLOCK_BASS"
   no-sell-volume: 1.0
   no-sell-pitch: 1.0

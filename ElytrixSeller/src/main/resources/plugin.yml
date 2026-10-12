@@ -1,20 +1,22 @@
-name: rSeller
+name: ElytrixSeller
 version: '${version}'
 main: my.reqqpe.rseller.Main
 api-version: '1.16'
-authors: [reqqpe]
+authors: [ElytriX]
+description: '&#F8BEFBᴇ&#F6BEFBʟ&#F3BEFBʏ&#F1BFFBᴛ&#EEBFFBʀ&#ECBFFBɪ&#E9BFFBx &7» Продвинутая система скупки для ElytriX'
+website: 'elytrix.pw'
 depend: [PlaceholderAPI]
 softdepend: [NBTAPI, Vault, CoinsEngine, PlayerPoints]
 commands:
   sell:
-    description: Открыть меню скупщика
-    aliases: [buyer, seller]
+    description: Открыть меню скупщика ElytrixSeller
+    aliases: [buyer, seller, elytrixsell]
   rseller:
-    aliases: [sa, ba, buyadmin, selladmin, rs]
+    aliases: [sa, ba, buyadmin, selladmin, rs, elytrixseller]
     permission: rseller.admin
   autosell:
-    description: Позволяет переключать автоскупку через команду
-    aliases: [autos]
+    description: Переключение автоскупки ElytrixSeller
+    aliases: [autos, elytrixauto]
 
 permissions:
   rseller.autosell:

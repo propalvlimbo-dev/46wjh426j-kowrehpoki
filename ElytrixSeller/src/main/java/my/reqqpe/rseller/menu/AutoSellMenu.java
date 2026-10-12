@@ -28,8 +28,8 @@ import java.util.regex.Pattern;
 
 public class AutoSellMenu extends AbstractMenu implements Listener {
     private final AutoSellManager autoSellManager;
-    private final Map<UUID, String> playerCategory = new HashMap<>();
-    private final Map<UUID, Map<String, Integer>> playerCategoryPages = new HashMap<>();
+    private static final Map<UUID, String> playerCategory = new HashMap<>();
+    private static final Map<UUID, Map<String, Integer>> playerCategoryPages = new HashMap<>();
     private int totalSlots;
     private final NumberFormatManager numberFormatManager;
     private autoSellItem autoSellItem;
@@ -55,14 +55,13 @@ public class AutoSellMenu extends AbstractMenu implements Listener {
     }
 
     @Override
-    protected FileConfiguration getGuiConfig() {
-        return plugin.getAutoSellGUIConfig().getConfig();
+    protected String getMenuId() {
+        return "autoSellItemsGUI";
     }
 
-
     @Override
-    protected String getMenuId() {
-        return "autoSellGUI";
+    protected FileConfiguration getGuiConfig() {
+        return plugin.getAutoSellItemsGUIConfig().getConfig();
     }
 
 
@@ -81,9 +80,16 @@ public class AutoSellMenu extends AbstractMenu implements Listener {
         IntList specialSlots = parseSlotList(guiConfig.getStringList("special-slots"));
         this.totalSlots = specialSlots.size();
 
+        // If animation is active, parseAutoSellItems will be called in onAnimationComplete
+        if (!isAnimating(player.getUniqueId())) {
+            parseAutoSellItems(player, inv);
+        }
+    }
 
+
+    @Override
+    protected void onAnimationComplete(Player player, Inventory inv) {
         parseAutoSellItems(player, inv);
-
     }
 
 
@@ -231,6 +237,16 @@ public class AutoSellMenu extends AbstractMenu implements Listener {
                 .put(category, page);
     }
 
+    public static void setPlayerCategory(UUID uuid, String category) {
+        playerCategory.put(uuid, category);
+    }
+
+    public static void setPlayerPage(UUID uuid, String category, int page) {
+        playerCategoryPages
+                .computeIfAbsent(uuid, k -> new HashMap<>())
+                .put(category, page);
+    }
+
 
     private List<Item> getItemsByPage(String category, int page) {
         List<Item> allItems = autoSellManager.getCategoryItems(category);
@@ -340,6 +356,12 @@ public class AutoSellMenu extends AbstractMenu implements Listener {
                 }
                 openMenu(player);
             }
+        } else if (actionLower.equals("[toggle_all_autosell]")) {
+            PlayerData playerData = PlayerDataCache.getOrCreate(player.getUniqueId());
+            for (Item item : plugin.getItemManager().getAll()) {
+                playerData.setAutosell(item.id(), false);
+            }
+            openMenu(player);
         } else {
             runMainActions(player, action);
         }

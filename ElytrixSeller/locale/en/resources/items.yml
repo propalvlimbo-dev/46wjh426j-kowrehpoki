@@ -1,55 +1,806 @@
-#                 .__               .__
-# _______  ______ |  |  __ __  ____ |__| ____   ______
-# \_  __ \ \____ \|  | |  |  \/ ___\|  |/    \ /  ___/
-#  |  | \/ |  |_> >  |_|  |  / /_/  >  |   |  \\___ \
-#  |__|    |   __/|____/____/\___  /|__|___|  /____  >
-#          |__|             /_____/         \/     \/
-#
-#
-# Ready-made configuration (ru conf):
-# https://spigotmc.ru/resources/konfig-predmetov-dlja-plagina-rseller.3859
-#
 settings-check:
   display-name: true
   lore: true
   enchants: true
   model-data: true
-  nbt-tags: false # Requires the nbt-api plugin
+  nbt-tags: false
 
 custom-items: {}
 
 items:
   COAL:
+    price: 8
+    points: 0.1
+    name: "&#F8BEFBCoal"
+  LAPIS_LAZULI:
     price: 10
     points: 0.1
-    name: "&fCoal"
-
-  LAPIS_LAZULI:
-    price: 12
+    name: "&#F8BEFBLapis Lazuli"
+  REDSTONE:
+    price: 9
     points: 0.1
-    name: "&fLapis Lazuli"
-
-  GOLD_INGOT:
-    price: 25
-    points: 1.0
-    name: "&fGold Ingot"
+    name: "&#F8BEFBRedstone"
+  GLOWSTONE_DUST:
+    price: 12
+    points: 0.2
+    name: "&#F8BEFBGlowstone Dust"
+  QUARTZ:
+    price: 14
+    points: 0.2
+    name: "&#F8BEFBQuartz"
+  AMETHYST_SHARD:
+    price: 18
+    points: 0.3
+    name: "&#F8BEFBAmethyst Shard"
 
   IRON_INGOT:
     price: 20
     points: 1.0
-    name: "&fIron Ingot"
-
+    name: "&#F8BEFBIron Ingot"
+  GOLD_INGOT:
+    price: 28
+    points: 1.2
+    name: "&#F8BEFBGold Ingot"
+  COPPER_INGOT:
+    price: 11
+    points: 0.3
+    name: "&#F8BEFBCopper Ingot"
   DIAMOND:
-    price: 45.0
-    points: 1.5
-    name: "&fDiamond"
-
-  EMERALD:
-    price: 65.0
+    price: 50
     points: 2.0
-    name: "&fEmerald"
-
+    name: "&#F8BEFBDiamond"
+  EMERALD:
+    price: 70
+    points: 2.5
+    name: "&#F8BEFBEmerald"
   NETHERITE_INGOT:
-    price: 90.0
+    price: 100
+    points: 5.0
+    name: "&#F8BEFBNetherite Ingot"
+  NETHERITE_SCRAP:
+    price: 25
+    points: 1.2
+    name: "&#F8BEFBNetherite Scrap"
+
+  ROTTEN_FLESH:
+    price: 2
+    points: 0.05
+    name: "&#F8BEFBRotten Flesh"
+  IRON_NUGGET:
+    price: 3
+    points: 0.05
+    name: "&#F8BEFBIron Nugget"
+  GOLD_NUGGET:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBGold Nugget"
+  ZOMBIE_HEAD:
+    price: 150
+    points: 8.0
+    name: "&#F8BEFBZombie Head"
+
+  BONE:
+    price: 3
+    points: 0.08
+    name: "&#F8BEFBBone"
+  ARROW:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBArrow"
+  BOW:
+    price: 8
+    points: 0.2
+    name: "&#F8BEFBBow"
+  SKELETON_SKULL:
+    price: 180
+    points: 10.0
+    name: "&#F8BEFBSkeleton Skull"
+
+  GUNPOWDER:
+    price: 12
+    points: 0.3
+    name: "&#F8BEFBGunpowder"
+  CREEPER_HEAD:
+    price: 200
+    points: 12.0
+    name: "&#F8BEFBCreeper Head"
+
+  STRING:
+    price: 5
+    points: 0.1
+    name: "&#F8BEFBString"
+  SPIDER_EYE:
+    price: 7
+    points: 0.15
+    name: "&#F8BEFBSpider Eye"
+  COBWEB:
+    price: 10
+    points: 0.2
+    name: "&#F8BEFBCobweb"
+
+  ENDER_PEARL:
+    price: 22
+    points: 0.8
+    name: "&#F8BEFBEnder Pearl"
+  ENDER_EYE:
+    price: 35
+    points: 1.5
+    name: "&#F8BEFBEye of Ender"
+
+  BLAZE_ROD:
+    price: 35
+    points: 1.5
+    name: "&#F8BEFBBlaze Rod"
+  BLAZE_POWDER:
+    price: 18
+    points: 0.8
+    name: "&#F8BEFBBlaze Powder"
+
+  GLASS_BOTTLE:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBGlass Bottle"
+  SUGAR:
+    price: 5
+    points: 0.1
+    name: "&#F8BEFBSugar"
+  STICK:
+    price: 1
+    points: 0.02
+    name: "&#F8BEFBStick"
+
+  STONE_SWORD:
+    price: 3
+    points: 0.05
+    name: "&#F8BEFBStone Sword"
+  WITHER_SKELETON_SKULL:
+    price: 500
+    points: 25.0
+    name: "&#F8BEFBWither Skeleton Skull"
+
+  GHAST_TEAR:
+    price: 65
+    points: 3.0
+    name: "&#F8BEFBGhast Tear"
+
+  MAGMA_CREAM:
+    price: 20
+    points: 0.7
+    name: "&#F8BEFBMagma Cream"
+
+  SLIME_BALL:
+    price: 10
+    points: 0.3
+    name: "&#F8BEFBSlime Ball"
+
+  PHANTOM_MEMBRANE:
+    price: 18
+    points: 0.6
+    name: "&#F8BEFBPhantom Membrane"
+
+  TRIDENT:
+    price: 80
     points: 4.0
-    name: "&fNetherite Ingot"
+    name: "&#F8BEFBTrident"
+  FISHING_ROD:
+    price: 10
+    points: 0.2
+    name: "&#F8BEFBFishing Rod"
+  NAUTILUS_SHELL:
+    price: 55
+    points: 2.5
+    name: "&#F8BEFBNautilus Shell"
+  HEART_OF_THE_SEA:
+    price: 300
+    points: 15.0
+    name: "&#F8BEFBHeart of the Sea"
+
+  PRISMARINE_SHARD:
+    price: 14
+    points: 0.4
+    name: "&#F8BEFBPrismarine Shard"
+  PRISMARINE_CRYSTALS:
+    price: 18
+    points: 0.5
+    name: "&#F8BEFBPrismarine Crystals"
+  SPONGE:
+    price: 45
+    points: 2.0
+    name: "&#F8BEFBSponge"
+  WET_SPONGE:
+    price: 40
+    points: 1.8
+    name: "&#F8BEFBWet Sponge"
+  COD:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBCod"
+  SALMON:
+    price: 5
+    points: 0.1
+    name: "&#F8BEFBSalmon"
+  TROPICAL_FISH:
+    price: 8
+    points: 0.15
+    name: "&#F8BEFBTropical Fish"
+  PUFFERFISH:
+    price: 7
+    points: 0.12
+    name: "&#F8BEFBPufferfish"
+
+  SHULKER_SHELL:
+    price: 75
+    points: 3.5
+    name: "&#F8BEFBShulker Shell"
+
+  LEATHER:
+    price: 6
+    points: 0.15
+    name: "&#F8BEFBLeather"
+  BEEF:
+    price: 8
+    points: 0.15
+    name: "&#F8BEFBBeef"
+  MILK_BUCKET:
+    price: 15
+    points: 0.3
+    name: "&#F8BEFBMilk Bucket"
+
+  PORKCHOP:
+    price: 8
+    points: 0.15
+    name: "&#F8BEFBPorkchop"
+
+  MUTTON:
+    price: 6
+    points: 0.12
+    name: "&#F8BEFBMutton"
+  WHITE_WOOL:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBWhite Wool"
+
+  FEATHER:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBFeather"
+  CHICKEN:
+    price: 6
+    points: 0.1
+    name: "&#F8BEFBChicken"
+  EGG:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBEgg"
+
+  RABBIT:
+    price: 6
+    points: 0.1
+    name: "&#F8BEFBRabbit"
+  RABBIT_HIDE:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBRabbit Hide"
+  RABBIT_FOOT:
+    price: 40
+    points: 2.0
+    name: "&#F8BEFBRabbit Foot"
+
+  INK_SAC:
+    price: 5
+    points: 0.1
+    name: "&#F8BEFBInk Sac"
+  GLOW_INK_SAC:
+    price: 12
+    points: 0.3
+    name: "&#F8BEFBGlow Ink Sac"
+
+  SCUTE:
+    price: 30
+    points: 1.2
+    name: "&#F8BEFBScute"
+  SEAGRASS:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBSeagrass"
+  KELP:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBKelp"
+
+  HONEYCOMB:
+    price: 15
+    points: 0.4
+    name: "&#F8BEFBHoneycomb"
+  HONEY_BOTTLE:
+    price: 18
+    points: 0.5
+    name: "&#F8BEFBHoney Bottle"
+
+  CROSSBOW:
+    price: 15
+    points: 0.4
+    name: "&#F8BEFBCrossbow"
+  OMINOUS_BANNER:
+    price: 35
+    points: 1.5
+    name: "&#F8BEFBOminous Banner"
+  SADDLE:
+    price: 40
+    points: 2.0
+    name: "&#F8BEFBSaddle"
+
+  TOTEM_OF_UNDYING:
+    price: 120
+    points: 6.0
+    name: "&#F8BEFBTotem of Undying"
+
+  ECHO_SHARD:
+    price: 85
+    points: 4.0
+    name: "&#F8BEFBEcho Shard"
+  DISC_FRAGMENT_5:
+    price: 25
+    points: 1.0
+    name: "&#F8BEFBDisc Fragment 5"
+  SCULK_CATALYST:
+    price: 60
+    points: 3.0
+    name: "&#F8BEFBSculk Catalyst"
+
+  NETHER_BRICK:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBNether Brick"
+  GRAVEL:
+    price: 1
+    points: 0.02
+    name: "&#F8BEFBGravel"
+  BLACKSTONE:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBBlackstone"
+  SOUL_SAND:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBSoul Sand"
+  NETHER_WART:
+    price: 8
+    points: 0.15
+    name: "&#F8BEFBNether Wart"
+  OBSIDIAN:
+    price: 12
+    points: 0.3
+    name: "&#F8BEFBObsidian"
+  CRYING_OBSIDIAN:
+    price: 20
+    points: 0.6
+    name: "&#F8BEFBCrying Obsidian"
+
+  ANCIENT_DEBRIS:
+    price: 55
+    points: 2.5
+    name: "&#F8BEFBAncient Debris"
+
+  END_STONE:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBEnd Stone"
+  CHORUS_FRUIT:
+    price: 15
+    points: 0.4
+    name: "&#F8BEFBChorus Fruit"
+  POPPED_CHORUS_FRUIT:
+    price: 20
+    points: 0.6
+    name: "&#F8BEFBPopped Chorus Fruit"
+  DRAGON_BREATH:
+    price: 90
+    points: 5.0
+    name: "&#F8BEFBDragon Breath"
+  DRAGON_EGG:
+    price: 1000
+    points: 50.0
+    name: "&#F8BEFBDragon Egg"
+  ELYTRA:
+    price: 250
+    points: 12.0
+    name: "&#F8BEFBElytra"
+
+  NETHER_STAR:
+    price: 500
+    points: 25.0
+    name: "&#F8BEFBNether Star"
+
+  ENCHANTED_BOOK:
+    price: 30
+    points: 1.2
+    name: "&#F8BEFBEnchanted Book"
+  EXPERIENCE_BOTTLE:
+    price: 12
+    points: 0.4
+    name: "&#F8BEFBExperience Bottle"
+  NAME_TAG:
+    price: 20
+    points: 0.6
+    name: "&#F8BEFBName Tag"
+  BOOK:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBBook"
+  PAPER:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBPaper"
+
+  DRAGON_HEAD:
+    price: 350
+    points: 18.0
+    name: "&#F8BEFBDragon Head"
+  PIGLIN_HEAD:
+    price: 160
+    points: 8.0
+    name: "&#F8BEFBPiglin Head"
+
+  DIAMOND_HORSE_ARMOR:
+    price: 60
+    points: 2.5
+    name: "&#F8BEFBDiamond Horse Armor"
+  GOLDEN_HORSE_ARMOR:
+    price: 30
+    points: 1.2
+    name: "&#F8BEFBGolden Horse Armor"
+  IRON_HORSE_ARMOR:
+    price: 25
+    points: 1.0
+    name: "&#F8BEFBIron Horse Armor"
+  LEATHER_HORSE_ARMOR:
+    price: 10
+    points: 0.3
+    name: "&#F8BEFBLeather Horse Armor"
+
+  TURTLE_EGG:
+    price: 20
+    points: 0.6
+    name: "&#F8BEFBTurtle Egg"
+  SNIFFER_EGG:
+    price: 35
+    points: 1.5
+    name: "&#F8BEFBSniffer Egg"
+  TORCHFLOWER_SEEDS:
+    price: 25
+    points: 1.0
+    name: "&#F8BEFBTorchflower Seeds"
+  PITCHER_POD:
+    price: 30
+    points: 1.2
+    name: "&#F8BEFBPitcher Pod"
+  ARMADILLO_SCUTE:
+    price: 22
+    points: 0.8
+    name: "&#F8BEFBArmadillo Scute"
+  WIND_CHARGE:
+    price: 18
+    points: 0.6
+    name: "&#F8BEFBWind Charge"
+  BREEZE_ROD:
+    price: 32
+    points: 1.3
+    name: "&#F8BEFBBreeze Rod"
+  OMINOUS_TRIAL_KEY:
+    price: 45
+    points: 2.0
+    name: "&#F8BEFBOminous Trial Key"
+  TRIAL_KEY:
+    price: 28
+    points: 1.0
+    name: "&#F8BEFBTrial Key"
+  HEAVY_CORE:
+    price: 120
+    points: 6.0
+    name: "&#F8BEFBHeavy Core"
+  MACE:
+    price: 200
+    points: 10.0
+    name: "&#F8BEFBMace"
+
+  BREAD:
+    price: 5
+    points: 0.1
+    name: "&#F8BEFBBread"
+  WHEAT:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBWheat"
+  CARROT:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBCarrot"
+  POTATO:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBPotato"
+  BEETROOT:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBBeetroot"
+  MELON_SLICE:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBMelon Slice"
+  PUMPKIN:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBPumpkin"
+  BAMBOO:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBBamboo"
+
+  # ────────────────────────────────────
+  # Golden & enchanted items
+  # ────────────────────────────────────
+  GOLDEN_APPLE:
+    price: 45
+    points: 2.0
+    name: "&#F8BEFBGolden Apple"
+  ENCHANTED_GOLDEN_APPLE:
+    price: 250
+    points: 12.0
+    name: "&#F8BEFBEnchanted Golden Apple"
+  GOLDEN_CARROT:
+    price: 35
+    points: 1.5
+    name: "&#F8BEFBGolden Carrot"
+  GOLDEN_SWORD:
+    price: 20
+    points: 0.8
+    name: "&#F8BEFBGolden Sword"
+  GOLDEN_AXE:
+    price: 18
+    points: 0.7
+    name: "&#F8BEFBGolden Axe"
+  GOLDEN_PICKAXE:
+    price: 22
+    points: 0.9
+    name: "&#F8BEFBGolden Pickaxe"
+  GOLDEN_SHOVEL:
+    price: 12
+    points: 0.5
+    name: "&#F8BEFBGolden Shovel"
+  GOLDEN_HOE:
+    price: 10
+    points: 0.4
+    name: "&#F8BEFBGolden Hoe"
+  GOLDEN_HELMET:
+    price: 25
+    points: 1.0
+    name: "&#F8BEFBGolden Helmet"
+  GOLDEN_CHESTPLATE:
+    price: 40
+    points: 1.6
+    name: "&#F8BEFBGolden Chestplate"
+  GOLDEN_LEGGINGS:
+    price: 35
+    points: 1.4
+    name: "&#F8BEFBGolden Leggings"
+  GOLDEN_BOOTS:
+    price: 20
+    points: 0.8
+    name: "&#F8BEFBGolden Boots"
+
+  # ────────────────────────────────────
+  # Food
+  # ────────────────────────────────────
+  CAKE:
+    price: 25
+    points: 0.8
+    name: "&#F8BEFBCake"
+  COOKIE:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBCookie"
+  DRIED_KELP:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBDried Kelp"
+  MUSHROOM_STEW:
+    price: 8
+    points: 0.2
+    name: "&#F8BEFBMushroom Stew"
+  BEETROOT_SOUP:
+    price: 8
+    points: 0.2
+    name: "&#F8BEFBBeetroot Soup"
+  RABBIT_STEW:
+    price: 12
+    points: 0.3
+    name: "&#F8BEFBRabbit Stew"
+
+  # ────────────────────────────────────
+  # Ore blocks & minerals
+  # ────────────────────────────────────
+  COAL_BLOCK:
+    price: 72
+    points: 0.9
+    name: "&#F8BEFBCoal Block"
+  IRON_BLOCK:
+    price: 180
+    points: 9.0
+    name: "&#F8BEFBIron Block"
+  GOLD_BLOCK:
+    price: 252
+    points: 10.8
+    name: "&#F8BEFBGold Block"
+  DIAMOND_BLOCK:
+    price: 450
+    points: 18.0
+    name: "&#F8BEFBDiamond Block"
+  EMERALD_BLOCK:
+    price: 630
+    points: 22.5
+    name: "&#F8BEFBEmerald Block"
+  LAPIS_BLOCK:
+    price: 90
+    points: 0.9
+    name: "&#F8BEFBLapis Block"
+  REDSTONE_BLOCK:
+    price: 81
+    points: 0.9
+    name: "&#F8BEFBRedstone Block"
+  COPPER_BLOCK:
+    price: 99
+    points: 2.7
+    name: "&#F8BEFBCopper Block"
+  NETHERITE_BLOCK:
+    price: 900
+    points: 45.0
+    name: "&#F8BEFBNetherite Block"
+  AMETHYST_BLOCK:
+    price: 72
+    points: 1.2
+    name: "&#F8BEFBAmethyst Block"
+  RAW_IRON:
+    price: 12
+    points: 0.5
+    name: "&#F8BEFRaw Iron"
+  RAW_GOLD:
+    price: 18
+    points: 0.7
+    name: "&#F8BEFBRaw Gold"
+  RAW_COPPER:
+    price: 6
+    points: 0.2
+    name: "&#F8BEFBRaw Copper"
+
+  # ────────────────────────────────────
+  # Building blocks
+  # ────────────────────────────────────
+  COBBLESTONE:
+    price: 1
+    points: 0.02
+    name: "&#F8BEFBCobblestone"
+  MOSSY_COBBLESTONE:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBMossy Cobblestone"
+  ANDESITE:
+    price: 1
+    points: 0.02
+    name: "&#F8BEFBAndesite"
+  DIORITE:
+    price: 1
+    points: 0.02
+    name: "&#F8BEFBDiorite"
+  GRANITE:
+    price: 1
+    points: 0.02
+    name: "&#F8BEFBGranite"
+  DEEPSLATE:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBDeepslate"
+  COBBLED_DEEPSLATE:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBCobbled Deepslate"
+  SAND:
+    price: 1
+    points: 0.02
+    name: "&#F8BEFBSand"
+  RED_SAND:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBRed Sand"
+  CLAY_BALL:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBClay Ball"
+  BRICK:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBBrick"
+  POINTED_DRIPSTONE:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBPointed Dripstone"
+  CALCITE:
+    price: 2
+    points: 0.04
+    name: "&#F8BEFBCalcite"
+  TUFF:
+    price: 1
+    points: 0.02
+    name: "&#F8BEFBTuff"
+  BASALT:
+    price: 1
+    points: 0.02
+    name: "&#F8BEFBBasalt"
+  GLOWSTONE:
+    price: 48
+    points: 0.8
+    name: "&#F8BEFBGlowstone"
+  SEA_LANTERN:
+    price: 60
+    points: 2.0
+    name: "&#F8BEFBSea Lantern"
+  SHROOMLIGHT:
+    price: 20
+    points: 0.6
+    name: "&#F8BEFBShroomlight"
+  HONEY_BLOCK:
+    price: 72
+    points: 2.0
+    name: "&#F8BEFBHoney Block"
+  SLIME_BLOCK:
+    price: 90
+    points: 2.7
+    name: "&#F8BEFBSlime Block"
+  BONE_BLOCK:
+    price: 27
+    points: 0.7
+    name: "&#F8BEFBBone Block"
+
+  # ────────────────────────────────────
+  # Wood & plants
+  # ────────────────────────────────────
+  OAK_LOG:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBOak Log"
+  BIRCH_LOG:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBBirch Log"
+  SPRUCE_LOG:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBSpruce Log"
+  JUNGLE_LOG:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBJungle Log"
+  ACACIA_LOG:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBAcacia Log"
+  DARK_OAK_LOG:
+    price: 3
+    points: 0.06
+    name: "&#F8BEFBDark Oak Log"
+  MANGROVE_LOG:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBMangrove Log"
+  CHERRY_LOG:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBCherry Log"
+  CRIMSON_STEM:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBCrimson Stem"
+  WARPED_STEM:
+    price: 4
+    points: 0.08
+    name: "&#F8BEFBWarped Stem"

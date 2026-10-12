@@ -47,6 +47,23 @@ public class SellMenu extends AbstractMenu implements Listener {
         super.openMenu(player);
     }
 
+    @EventHandler
+    public void onInventoryClickUpdate(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player player)) return;
+        if (!(e.getInventory().getHolder() instanceof CustomInventoryHolder holder)) return;
+        if (!holder.id().equals(getMenuId())) return;
+
+        // Update preview on shift-click from player inventory
+        if (e.isShiftClick() && e.getClickedInventory() == player.getInventory()) {
+            Inventory inv = player.getOpenInventory().getTopInventory();
+            inv.getViewers().forEach(viewer -> {
+                if (viewer instanceof Player p) {
+                    p.updateInventory();
+                }
+            });
+        }
+    }
+
     @Override
     protected String replacePlaceholders(Player player, String text, Inventory inventory) {
         if (text == null || text.isEmpty()) return "";
@@ -96,23 +113,29 @@ public class SellMenu extends AbstractMenu implements Listener {
         super.closeMenu(player, e);
     }
 
-    @EventHandler
-    public void onClickInventory(InventoryClickEvent e) {
-        if (!(e.getWhoClicked() instanceof Player player)) return;
-        if (!(e.getInventory().getHolder() instanceof CustomInventoryHolder holder)) return;
-        if (!holder.id().equals(getMenuId())) return;
-
-        handleClick(player, e);
-    }
-
-
     @Override
     protected boolean handleSpecialSlotClick(Player player, InventoryClickEvent e) {
-
         int rawSlot = e.getRawSlot();
 
         if (specialSlots.contains(rawSlot)) {
-            e.setCancelled(false);
+            ItemStack cursor = e.getCursor();
+            ItemStack current = e.getCurrentItem();
+            boolean hasCursor = cursor != null && cursor.getType() != Material.AIR;
+            boolean hasCurrent = current != null && current.getType() != Material.AIR;
+
+            // Allow placing items into empty special slots only if item is registered
+            if (hasCursor && !hasCurrent && !e.isShiftClick()) {
+                if (plugin.getItemManager().search(cursor) == null) {
+                    // Item not registered - block placement
+                    e.setCancelled(true);
+                } else {
+                    // Item registered - allow placement
+                    e.setCancelled(false);
+                }
+            } else {
+                // Block all other interactions (taking, swapping, shift-click from menu)
+                e.setCancelled(true);
+            }
             return true;
         }
 

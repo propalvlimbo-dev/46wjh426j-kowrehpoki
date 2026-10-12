@@ -1,0 +1,129 @@
+title: "&#F8BEFBАвто-Продажа — {current_category}"
+size: 54
+special-slots:
+  - 10-16
+  - 19-25
+  - 28-34
+
+animation:
+  enabled: true
+  delay: 1
+  sound: "BLOCK_NOTE_BLOCK_PLING"
+
+autosell_item:
+  name: "&7« &#F8BEFB{item_name} &7»"
+  autosell-enchanted: true
+  lore:
+    - '&#F8BEFB&l┃ '
+    - '&#F8BEFB&l┃ &fСтатус: &#F8BEFB{state_autosell}'
+    - '&#F8BEFB&l┃ '
+    - '&#F8BEFB&l┃ &fЦена продажи: &#F8BEFB{sell_price}$'
+    - '&#F8BEFB&l┃ &fОчки за продажу: &#F8BEFB{sell_points}'
+    - '&#F8BEFB&l┃ '
+    - '&7● &fНажмите для переключения'
+
+items:
+  category_info:
+    material: BOOK
+    name: "&7« &#F8BEFB{current_category} &7»"
+    slot: 4
+    lore:
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fКатегория: &#F8BEFB{current_category}'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fЛКМ — предыдущая &8| &fПКМ — следующая'
+    left_click_actions:
+      - '[switch_category] -1'
+    right_click_actions:
+      - '[switch_category] +1'
+
+  prev_page:
+    material: black_dye
+    name: "&7« &#F8BEFBНазад &7»"
+    slot: 48
+    lore:
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fПредыдущая страница'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для перехода'
+    left_click_actions:
+      - '[prev_page]'
+    right_click_actions:
+      - '[prev_page]'
+
+  next_page:
+    material: black_dye
+    name: "&7« &#F8BEFBДалее &7»"
+    slot: 50
+    lore:
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fСледующая страница'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для перехода'
+    left_click_actions:
+      - '[next_page]'
+    right_click_actions:
+      - '[next_page]'
+
+  back:
+    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGNiM2FjZGMxMWNhNzQ3YmY3MTBlNTlmNGM4ZTliM2Q5NDlmZGQzNjRjNjg2OTgzMWNhODc4ZjA3NjNkMTc4NyJ9fX0=
+    name: "&7« &#F8BEFBКатегории &7»"
+    lore:
+      - '&#F8BEFB&l '
+      - '&#F8BEFB&l┃ &fВернуться к выбору категории'
+      - '&#F8BEFB&l '
+      - '&7● &fНажмите для возврата'
+    slot: 45
+    left_click_actions:
+      - '[opengui] autoSellGUI'
+    right_click_actions:
+      - '[opengui] autoSellGUI'
+
+  toggle_category_autosell:
+    material: magma_cream
+    name: "&7« &#F8BEFBАвто-скупка категории &7»"
+    lore:
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fСтатус: &#F8BEFB{state_autosell_category}'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для переключения'
+    slot: 53
+    left_click_actions:
+      - '[toggle_autosell_category]'
+
+  toggle_autosell_message:
+    material: snowball
+    name: "&7« &#F8BEFBУведомления &7»"
+    lore:
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fСтатус: &#F8BEFB{state_autosell_message}'
+      - '&#F8BEFB&l '
+      - '&7● &fНажмите для переключения'
+    slot: 52
+    left_click_actions:
+      - '[toggle_autosell_message]'
+
+  decorate:
+    material: purple_stained_glass_pane
+    name: "&r"
+    slots:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 17
+      - 18
+      - 26
+      - 27
+      - 35
+      - 36
+      - 44
+      - 46
+      - 47
+      - 49
+      - 51

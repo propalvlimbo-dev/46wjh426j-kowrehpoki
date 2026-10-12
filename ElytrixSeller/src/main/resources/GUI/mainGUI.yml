@@ -1,57 +1,134 @@
-#                 .__               .__               
-# _______  ______ |  |  __ __  ____ |__| ____   ______
-# \_  __ \ \____ \|  | |  |  \/ ___\|  |/    \ /  ___/
-#  |  | \/ |  |_> >  |_|  |  / /_/  >  |   |  \\___ \ 
-#  |__|    |   __/|____/____/\___  /|__|___|  /____  >
-#          |__|             /_____/         \/     \/ 
-#        
-# Discord: https://dsc.gg/rplugins
+title: "&#F8BEFBСкупщик"
+size: 54
 
-
-title: "&8Скупщик -> Выбор скупщика"
-size: 27
-special-slots: [] # Нет смысла что-то указывать( просто отсутствует обработка )
+animation:
+  enabled: true
+  delay: 1
+  sound: "BLOCK_NOTE_BLOCK_PLING"
 
 items:
   autosell:
     material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTFmYWQ1ZDJiODIyZmNlOGQ1OWJjZTA4NDE0YjlmODdmMjdhYTlkNzdhNzM4MjNhNThkZDUxN2VhODBiMmE1In19fQ==
-    model-data: -1 # Не обязательный параметр можно убрать или же поставить -1
-    name: "&#54A0F4▶ Автоскупщик"
-    slot: 12
+    model-data: -1
+    name: "&7« &#F8BEFBАвто-Продажа &7»"
+    slot: 20
     lore:
-      - ""
-      - "&7Нажмите, чтобы открыть систему"
-      - "&7автоматической продажи ресурсов."
-      - ""
-      - "&fВыбранные &fпредметы будут продаваться"
-      - "&f&#54A0F4автоматически &fсразу после подбора."
-      - ""
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fАвтоматическая скупка: &#F8BEFBВключена'
+      - '&#F8BEFB&l┃ &fМгновенная продажа: &#F8BEFBПосле подбора'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для настройки'
     left_click_actions:
       - '[opengui] autoSellGUI'
     right_click_actions:
       - '[opengui] autoSellGUI'
+
   allsell:
     material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzhhZjhiN2Q0M2ZlNGRlOWY4Y2JjNGJiNDk1MzQzY2Y3MTVlYjhmZWJhNGJlZDRjZGNlODJjMWIwY2UxNzIyIn19fQ==
-    model-data: -1 # Не обязательный параметр можно убрать или же поставить -1
-    name: "&#54A0F4▶ Универсальный скупщик"
-    slot: 14
+    model-data: -1
+    name: "&7« &#F8BEFBУниверсальный скупщик &7»"
+    slot: 22
     lore:
-      - ""
-      - "&7Нажмите, чтобы открыть торговца"
-      - "&7со скупкой любых предметов."
-      - ""
-      - "&fПросто &#54A0F4положите &fлут — &#54A0F4и получите"
-      - "&fмонеты за &#54A0F4всё&f, что можно продать."
-      - ""
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fСкупка любого лута: &#F8BEFBДоступно'
+      - '&#F8BEFB&l┃ &fПоместите ресурсы: &#F8BEFBМоментальный расчёт'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для открытия'
     left_click_actions:
       - '[opengui] allSellGUI'
     right_click_actions:
       - '[opengui] allSellGUI'
-  decorate:
-    material: GRAY_STAINED_GLASS_PANE
+
+  level_info:
+    material: BOOK
+    name: "&7« &#F8BEFBСистема прокачки &7»"
+    slot: 24
+    lore:
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fВаш уровень: &#F8BEFB%rseller_level%'
+      - '&#F8BEFB&l┃ &fПрогресс: &#F8BEFB%rseller_points%/%rseller_points_needed%'
+      - '&#F8BEFB&l┃ &fБустер монет: &#F8BEFBx%rseller_multiplier_coins%'
+      - '&#F8BEFB&l┃ &fБустер очков: &#F8BEFBx%rseller_multiplier_points%'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fПродавайте лут для прокачки'
+    left_click_actions: []
+    right_click_actions: []
+
+  community:
+    slot: 49
+    material: "basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTMzODI2Mjc1N2Q2M2U0MmQ0NGE2ZjE1OTliMTJkODI3NzQwZDdmM2FiOWEyZTZkZGIxNjFmZGE4YzNlZWYifX19"
+    name: "&7« &#F8BEFBСообщества ElytriX &7»"
+    lore:
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fБудьте в курсе: &#F8BEFBВсех новостей'
+      - '&#F8BEFB&l┃ &fСвежие обновления: &#F8BEFBАнонсы'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для отправки ссылок'
+    left_click_actions:
+      - '[message]'
+      - '[message] &f☁ &#F8BEFBᴇ&#F6BEFBʟ&#F3BEFBʏ&#F1BFFBᴛ&#EEBFFBʀ&#ECBFFBɪ&#E9BFFBx &7» &#F8BEFBСообщества'
+      - '[message] &#F8BEFB&l┃ &fНаш сайт: &#F8BEFBelytrix.pw'
+      - '[message] &#F8BEFB&l┃ &fTelegram: &#F8BEFBt.me/elytrix_ru'
+      - '[message] &#F8BEFB&l┃ &fDiscord: &#F8BEFBdsc.gg/elytrix_ru'
+      - '[message]'
+      - '[close]'
+    right_click_actions:
+      - '[message]'
+      - '[message] &f☁ &#F8BEFBᴇ&#F6BEFBʟ&#F3BEFBʏ&#F1BFFBᴛ&#EEBFFBʀ&#ECBFFBɪ&#E9BFFBx &7» &#F8BEFBСообщества'
+      - '[message] &#F8BEFB&l &fНаш сайт: &#F8BEFBelytrix.pw'
+      - '[message] &#F8BEFB&l┃ &fTelegram: &#F8BEFBt.me/elytrix_ru'
+      - '[message] &#F8BEFB&l┃ &fDiscord: &#F8BEFBdsc.gg/elytrix_ru'
+      - '[message]'
+      - '[close]'
+
+  close:
+    material: red_dye
+    slot: 45
+    name: "&7« &cЗакрыть меню &7»"
+    lore:
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fВыход в игровой мир'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для закрытия'
+    left_click_actions:
+      - '[close]'
+    right_click_actions:
+      - '[close]'
+
+  design_top:
+    material: black_stained_glass_pane
+    display_name: '&r'
     slots:
-      - "0-11"
-      - "15-26"
-  decorate1:
-    material: chain
-    slot: 13
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 16
+      - 17
+      - 18
+      - 26
+
+  design_bottom:
+    material: purple_stained_glass_pane
+    display_name: '&r'
+    slots:
+      - 27
+      - 35
+      - 36
+      - 37
+      - 43
+      - 44
+      - 46
+      - 47
+      - 48
+      - 50
+      - 51
+      - 52
+      - 53

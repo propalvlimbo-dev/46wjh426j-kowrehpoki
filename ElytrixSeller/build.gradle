@@ -25,15 +25,10 @@ repositories {
     }
 
     maven {
-        url = uri('https://repo.bstats.org/repository/public/')
+        url = uri('https://repo.maven.apache.org/maven2/')
     }
-
     maven {
         url = uri('https://repo.extendedclip.com/releases/')
-    }
-
-    maven {
-        url = uri('https://repo.maven.apache.org/maven2/')
     }
     maven {
         name = "nightexpress-releases"
@@ -41,6 +36,12 @@ repositories {
     }
     maven {
         url = 'https://repo.rosewooddev.io/repository/public/'
+    }
+    maven {
+        url = 'https://repo.triumphteam.dev/snapshots/'
+    }
+    maven {
+        url = 'https://repo.auxilor.io/repository/maven-public/'
     }
 }
 
@@ -56,13 +57,12 @@ dependencies {
     compileOnly libs.com.github.milkbowl.vaultapi
     compileOnly libs.de.tr7zw.item.nbt.api.plugin
     compileOnly libs.it.unimi.dsi.fastutil
-    compileOnly "su.nightexpress.coinsengine:CoinsEngine:2.7.0"
     compileOnly 'org.black_ixx:playerpoints:3.3.4'
 }
 
 group = 'my.reqqpe'
-version = '1.15.0'
-description = 'rSeller'
+version = '2.0.0-ElytriX'
+description = 'ElytrixSeller'
 java.sourceCompatibility = JavaVersion.VERSION_16
 
 tasks.withType(JavaCompile) {
@@ -96,7 +96,7 @@ tasks.register("processEnResources", Copy) {
 }
 
 tasks.register("jarRu", Jar) {
-    archiveClassifier = "ru"
+    archiveClassifier = ""
 
     dependsOn(classes)
     dependsOn(processResources)

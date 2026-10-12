@@ -1,16 +1,11 @@
-type: sqlite # sqlite, mysql, postgres
-table_prefix: "rseller_"
+type: sqlite
+table_prefix: "elytrixseller_"
 
-# Включить логирование продаж в базу данных
 logging-enabled: true
-# Автоматически удалять логи старше указанного кол-ва дней (0 — отключить)
 log-purge-days: 30
 
+save-cache-timer: 1800
 
-# Раз в какое время будут сохраняться данные игроков (в секундах)
-save-cache-timer: 1800 # 30 мин
-
-# Настройки пула соединений, если не знаете что это рекомендуется не менять
 hikari:
   max-pool-size: 10
   minimum-idle: 2
@@ -19,10 +14,9 @@ hikari:
   connection-timeout: 30000
   max-life-time: 1800000
 
-# Параметры подключения к MySQL/Postgres
 connection:
   host: localhost
   port: 3306
-  database: rseller
+  database: elytrixseller
   username: "username"
   password: "password"

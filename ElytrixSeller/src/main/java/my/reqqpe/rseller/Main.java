@@ -22,6 +22,7 @@ import my.reqqpe.rseller.listeners.MenuListener;
 import my.reqqpe.rseller.listeners.PlayerPickupItem;
 import my.reqqpe.rseller.managers.*;
 import my.reqqpe.rseller.menu.AutoSellMenu;
+import my.reqqpe.rseller.menu.AutoSellCategoryMenu;
 import my.reqqpe.rseller.menu.MainMenu;
 import my.reqqpe.rseller.menu.SellLogMenu;
 import my.reqqpe.rseller.menu.SellMenu;
@@ -72,6 +73,8 @@ public final class Main extends JavaPlugin {
     private CustomConfig allSellGUIConfig;
     @Getter
     private CustomConfig autoSellGUIConfig;
+    @Getter
+    private CustomConfig autoSellItemsGUIConfig;
     @Getter
     private CustomConfig sellLogGUIConfig;
     @Getter
@@ -191,6 +194,11 @@ public final class Main extends JavaPlugin {
         };
         autoSellGUIConfig.setup();
 
+        autoSellItemsGUIConfig = new CustomConfig(this, "GUI/autoSellItemsGUI.yml") {
+            @Override protected void load() {}
+        };
+        autoSellItemsGUIConfig.setup();
+
         sellLogGUIConfig = new CustomConfig(this, "GUI/sellLogGUI.yml") {
             @Override protected void load() {}
         };
@@ -251,8 +259,13 @@ public final class Main extends JavaPlugin {
         menusConfigs.clear();
 
 
-        MenuManager.registerMenu("allSellGUI", new SellMenu(this));
-        MenuManager.registerMenu("autoSellGUI", new AutoSellMenu(this));
+        SellMenu sellMenu = new SellMenu(this);
+        MenuManager.registerMenu("allSellGUI", sellMenu);
+        getServer().getPluginManager().registerEvents(sellMenu, this);
+
+        MenuManager.registerMenu("autoSellGUI", new AutoSellCategoryMenu(this));
+        MenuManager.registerMenu("autoSellItemsGUI", new AutoSellMenu(this));
+
         SellLogMenu sellLogMenu = new SellLogMenu(this);
         MenuManager.registerMenu("sellLogGUI", sellLogMenu);
 

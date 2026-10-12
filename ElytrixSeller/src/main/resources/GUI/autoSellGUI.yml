@@ -1,122 +1,114 @@
-#                 .__               .__
-# _______  ______ |  |  __ __  ____ |__| ____   ______
-# \_  __ \ \____ \|  | |  |  \/ ___\|  |/    \ /  ___/
-#  |  | \/ |  |_> >  |_|  |  / /_/  >  |   |  \\___ \
-#  |__|    |   __/|____/____/\___  /|__|___|  /____  >
-#          |__|             /_____/         \/     \/
-#
-# Discord: https://dsc.gg/rplugins
-
-title: "&8Скупщик -> Автоскупщик"
+title: "&#F8BEFBАвто-Продажа — Категории"
 size: 54
-special-slots:
-  - 10-16
-  - 19-25
-  - 28-34
-autosell_item:
-  name: "&f{item_name}"
-  autosell-enchanted: true
-  lore:
-    - ""
-    - "&#54A0F4▶ Статус: &f{state_autosell}"
-    - ""
-    - "&#54A0F4* Цена продажи: &a{sell_price}$"
-    - "&#54A0F4* Очки за продажу: &b{sell_points}"
-    - ""
-    - "&fНажмите, чтобы включить или отключить авто-скупку"
+
+animation:
+  enabled: true
+  delay: 1
+  sound: "BLOCK_NOTE_BLOCK_PLING"
+
 items:
-  category:
-    material: book
-    model-data: -1 # Не обязательный параметр можно убрать или же поставить -1
-    name: "&#54A0F4▶ Категории"
-    slot: 4
+  category_ores:
+    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDY3ZDJiYzI3YzQ0YTcxMWExZTJmNDFlYjI4M2RhNTZmZWM5YTNkNmZiOTNhYWZkZmM4NWIxNWNkMThhMjY4MiJ9fX0=
+    name: "&7« &#F8BEFBРуды &7»"
+    slot: 11
     lore:
-      - ""
-      - "&#54A0F4* &fДоступные категории:"
-      - "&#54A0F4▶  &#54A0F4{category_index:-1}"
-      - "&#54A0F4 ▶  &#54A0F4{category_index:0}"
-      - "&#54A0F4▶  &#54A0F4{category_index:+1}"
-      - ""
-      - "&#54A0F4* ЛКМ &f— предыдущая категория"
-      - "&#54A0F4* ПКМ &f— следующая категория"
+      - '&#F8BEFB&l '
+      - '&#F8BEFB&l┃ &fРуды и минералы'
+      - '&#F8BEFB&l &fБлоки и камень'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для перехода'
     left_click_actions:
-      - '[switch_category] +1'
+      - '[open_category] ores'
     right_click_actions:
-      - '[switch_category] -1'
-  prev_page:
-    material: ARROW
-    name: "&#54A0F4▶ Предыдущая страница"
-    slot: 48
+      - '[open_category] ores'
+
+  category_mobs:
+    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDI4ZDlmZjU0MTg4YTFhZmVlNjViOTRmM2JmY2NlMzIxYzY0M2EzNDU5MGMxNGIxOTJiMmUzZWMyZjUyNWQzIn19fQ==
+    name: "&7« &#F8BEFBМобы &7»"
+    slot: 13
     lore:
-      - ""
-      - "&fНажмите, чтобы перейти"
-      - "&fна предыдущую страницу"
-      - ""
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fЛут со всех мобов'
+      - '&#F8BEFB&l┃ &fВраждебные и мирные'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для перехода'
     left_click_actions:
-      - '[prev_page]'
+      - '[open_category] mobs'
     right_click_actions:
-      - '[prev_page]'
-  next_page:
-    material: ARROW
-    name: "&#54A0F4▶ Следующая страница"
-    slot: 50
+      - '[open_category] mobs'
+
+  category_misc:
+    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjE1NmNiOTI3ZWExOTZkNDUyMjcwZWI1OGQ1Y2Y2MTJmNDlhMzQ2NTQwMjRhZmNjN2M3M2MyYjgxODg4M2YifX19
+    name: "&7« &#F8BEFBРазное &7»"
+    slot: 15
     lore:
-      - ""
-      - "&fНажмите, чтобы перейти"
-      - "&fна следующую страницу"
-      - ""
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fРедкий лут'
+      - '&#F8BEFB&l┃ &fАртефакты и боссы'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для перехода'
     left_click_actions:
-      - '[next_page]'
+      - '[open_category] misc'
     right_click_actions:
-      - '[next_page]'
+      - '[open_category] misc'
+
+  disable_all:
+    material: BARRIER
+    name: "&7« &cОтключить всё &7»"
+    slot: 31
+    lore:
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fОтключить автоскупку'
+      - '&#F8BEFB&l┃ &fдля всех предметов'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для отключения'
+    left_click_actions:
+      - '[disable_all_autosell]'
+    right_click_actions:
+      - '[disable_all_autosell]'
+
   back:
-    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTcyMjIwZjU0M2E2OTJhM2YyZjk0OWViMmE1MzQzNDk1NjEwMjY0ZTkxNmIxOWI3NzNjN2U0ZDIxYjg1ZDRjNyJ9fX0=
-    name: "&#54A0F4▶ Главное меню"
+    material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGNiM2FjZGMxMWNhNzQ3YmY3MTBlNTlmNGM4ZTliM2Q5NDlmZGQzNjRjNjg2OTgzMWNhODc4ZjA3NjNkMTc4NyJ9fX0=
+    name: "&7« &#F8BEFBГлавное меню &7»"
     lore:
-      - ""
-      - "&fНажмите, чтобы вернуться"
-      - "&fв главное меню скупщика"
-      - ""
-    slot: 45
+      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l┃ &fВернуться в главное меню'
+      - '&#F8BEFB&l┃ '
+      - '&7● &fНажмите для возврата'
+    slot: 49
     left_click_actions:
       - '[opengui] mainGUI'
     right_click_actions:
       - '[opengui] mainGUI'
-  toggle_category_autosell:
-    material: magma_cream
-    name: "&f"
-    lore:
-      - "&fНажмите, чтобы переключить"
-      - "&fавто-скупку для категории"
-      - ""
-      - "&fСтатус: {state_autosell_category}"
-      - ""
-    slot: 53
-    left_click_actions:
-      - '[toggle_autosell_category]'
-  toggle_autosell_message:
-    material: snowball
-    name: "&f"
-    lore:
-      - "&fНажмите, чтобы переключить"
-      - "&fотправку сообщения авто-скупки"
-      - ""
-      - "&fСтатус: {state_autosell_message}"
-      - ""
-    slot: 52
-    left_click_actions:
-      - '[toggle_autosell_message]'
 
   decorate:
-    material: GRAY_STAINED_GLASS_PANE
-    name: ""
+    material: purple_stained_glass_pane
+    name: "&r"
     slots:
-      - 0-3
-      - 5-9
-      - 17-18
-      - 26-27
-      - 35-36
-      - 44-44
-      - 46-47
-      - 49-49
-      - 51-51
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 17
+      - 18
+      - 26
+      - 27
+      - 35
+      - 36
+      - 37
+      - 43
+      - 44
+      - 45
+      - 46
+      - 47
+      - 48
+      - 50
+      - 51
+      - 52
+      - 53

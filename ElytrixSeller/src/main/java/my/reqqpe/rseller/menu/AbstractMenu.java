@@ -28,6 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 public abstract class AbstractMenu {
 
@@ -39,6 +40,10 @@ public abstract class AbstractMenu {
     protected final Int2ObjectMap<UpdatableItem> updatableItems = new Int2ObjectOpenHashMap<>();
     private final Map<UUID, List<BukkitTask>> updateTasks = new HashMap<>();
 
+    // Animation system
+    private final Set<UUID> animatingPlayers = new HashSet<>();
+    private final Map<UUID, BukkitTask> animationTasks = new HashMap<>();
+
 
     public AbstractMenu(Main plugin) {
         this.plugin = plugin;
@@ -47,26 +52,289 @@ public abstract class AbstractMenu {
     public record UpdatableItem(int slot, String name, List<String> lore) {
     }
 
+    // Animation state holder
+    private record SlotItem(int slot, ItemStack item) {}
+
 
     protected abstract FileConfiguration getGuiConfig();
 
     protected abstract String getMenuId();
 
 
+    public boolean isAnimating(UUID uuid) {
+        return animatingPlayers.contains(uuid);
+    }
+
+
     public void openMenu(Player player) {
         this.guiConfig = getGuiConfig();
 
-        String title = Colorizer.color(guiConfig.getString("title", "Скупщик"));
+        String title = Colorizer.color(guiConfig.getString("title", "ElytrixSeller"));
         int size = guiConfig.getInt("size", 54);
         if (size % 9 != 0 || size < 9 || size > 54) {
             size = 54;
         }
         Inventory inv = Bukkit.createInventory(new CustomInventoryHolder(getMenuId()), size, title);
 
-        loadItems(inv, player);
+        boolean animEnabled = guiConfig.getBoolean("animation.enabled", true);
+        int animDelay = guiConfig.getInt("animation.delay", 1);
+        String animSound = guiConfig.getString("animation.sound", "");
 
-        player.openInventory(inv);
-        startItemUpdates(player, inv);
+        if (animEnabled && animDelay > 0) {
+            player.openInventory(inv);
+            loadItemsAnimated(inv, player, animDelay, animSound);
+        } else {
+            loadItems(inv, player);
+            player.openInventory(inv);
+            startItemUpdates(player, inv);
+            onAnimationComplete(player, inv);
+        }
+    }
+
+
+    protected void loadItemsAnimated(Inventory inv, Player player, int delay, String soundName) {
+        slotToItemId.clear();
+        updatableItems.clear();
+
+        IntList specialSlotsList = parseSlotList(guiConfig.getStringList("special-slots"));
+        this.specialSlots = new IntArrayList(specialSlotsList);
+        Set<Integer> usedSlots = new HashSet<>(specialSlotsList);
+        ConfigurationSection itemsSection = guiConfig.getConfigurationSection("items");
+
+        List<SlotItem> pendingItems = new ArrayList<>();
+
+        if (itemsSection != null) {
+            for (String itemId : itemsSection.getKeys(false)) {
+                String path = "items." + itemId;
+                IntList itemSlots = slotORslots(path);
+                IntList slotsToRemove = new IntArrayList();
+                IntList validSlots = new IntArrayList();
+
+                for (int slot : itemSlots) {
+                    if (slot < 0 || slot >= inv.getSize()) {
+                        slotsToRemove.add(slot);
+                        plugin.getLogger().warning(plugin.getMessageConfig().getConsoleMenuSlotOutOfBounds()
+                                .replace("{menu}", getMenuId())
+                                .replace("{slot}", String.valueOf(slot))
+                                .replace("{item}", itemId)
+                                .replace("{max}", String.valueOf(inv.getSize() - 1)));
+                        continue;
+                    }
+                    if (specialSlotsList.contains(slot) || usedSlots.contains(slot)) {
+                        slotsToRemove.add(slot);
+                        plugin.getLogger().warning(plugin.getMessageConfig().getConsoleMenuSlotOccupied()
+                                .replace("{menu}", getMenuId())
+                                .replace("{slot}", String.valueOf(slot))
+                                .replace("{item}", itemId));
+                        continue;
+                    }
+                    validSlots.add(slot);
+                }
+
+                itemSlots.removeAll(slotsToRemove);
+
+                if (validSlots.isEmpty()) {
+                    plugin.getLogger().warning(plugin.getMessageConfig().getConsoleMenuNoSlots()
+                            .replace("{menu}", getMenuId())
+                            .replace("{item}", itemId));
+                    continue;
+                }
+
+                ItemStack item = buildItemStack(path, player, inv, itemId);
+                if (item == null) continue;
+
+                boolean isUpdatable = guiConfig.getBoolean(path + ".update", false);
+                String nameTemplate = guiConfig.getString(path + ".name", "");
+                List<String> loreTemplate = guiConfig.getStringList(path + ".lore");
+
+                for (int slot : validSlots) {
+                    pendingItems.add(new SlotItem(slot, item));
+                    slotToItemId.put(slot, itemId);
+
+                    if (isUpdatable) {
+                        updatableItems.put(slot, new UpdatableItem(slot, nameTemplate, loreTemplate));
+                    }
+                }
+            }
+        }
+
+        if (pendingItems.isEmpty()) {
+            startItemUpdates(player, inv);
+            onAnimationComplete(player, inv);
+            return;
+        }
+
+        // Sort items by distance from center for wave animation effect
+        int invSize = inv.getSize();
+        int cols = 9;
+        int centerRow = (invSize / cols) / 2;
+        int centerCol = cols / 2;
+
+        pendingItems.sort((a, b) -> {
+            int rowA = a.slot() / cols;
+            int colA = a.slot() % cols;
+            int rowB = b.slot() / cols;
+            int colB = b.slot() % cols;
+            double distA = Math.sqrt(Math.pow(rowA - centerRow, 2) + Math.pow(colA - centerCol, 2));
+            double distB = Math.sqrt(Math.pow(rowB - centerRow, 2) + Math.pow(colB - centerCol, 2));
+            return Double.compare(distA, distB);
+        });
+
+        // Start animation
+        UUID playerId = player.getUniqueId();
+        animatingPlayers.add(playerId);
+
+        Sound sound = null;
+        if (soundName != null && !soundName.isEmpty()) {
+            try {
+                sound = Sound.valueOf(soundName.toUpperCase());
+            } catch (IllegalArgumentException ignored) {}
+        }
+
+        final Sound finalSound = sound;
+        final int totalItems = pendingItems.size();
+
+        // Use faster delay for smoother animation, place multiple items per tick for large menus
+        final int effectiveDelay = Math.max(1, delay);
+        final int itemsPerTick = totalItems > 20 ? 2 : 1;
+
+        BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+            int index = 0;
+
+            @Override
+            public void run() {
+                if (!player.isOnline()) {
+                    cancelAnimation(playerId);
+                    return;
+                }
+
+                if (index >= totalItems) {
+                    cancelAnimation(playerId);
+                    startItemUpdates(player, inv);
+                    onAnimationComplete(player, inv);
+                    return;
+                }
+
+                int placed = 0;
+                while (index < totalItems && placed < itemsPerTick) {
+                    SlotItem slotItem = pendingItems.get(index);
+                    inv.setItem(slotItem.slot(), slotItem.item());
+                    placed++;
+                    index++;
+                }
+
+                if (finalSound != null) {
+                    float progress = (float) index / totalItems;
+                    float pitch = 1.2f + (progress * 0.6f);
+                    float volume = 0.2f + (progress * 0.15f);
+                    player.playSound(player.getLocation(), finalSound, volume, pitch);
+                }
+            }
+        }, 0L, effectiveDelay);
+
+        animationTasks.put(playerId, task);
+    }
+
+
+    private void cancelAnimation(UUID playerId) {
+        animatingPlayers.remove(playerId);
+        BukkitTask task = animationTasks.remove(playerId);
+        if (task != null) {
+            task.cancel();
+        }
+    }
+
+
+    private ItemStack buildItemStack(String path, Player player, Inventory inv, String itemId) {
+        String matString = guiConfig.getString(path + ".material", "STONE");
+        ItemStack item;
+
+        if (matString.toLowerCase().startsWith("basehead-")) {
+            String base64 = matString.substring("basehead-".length());
+            item = HeadUtil.getCustomHead(base64);
+        } else {
+            Material material = Material.matchMaterial(matString);
+            if (material == null) {
+                plugin.getLogger().warning(plugin.getMessageConfig().getConsoleMenuUnknownMaterial()
+                        .replace("{menu}", getMenuId())
+                        .replace("{item}", itemId)
+                        .replace("{material}", matString));
+                return null;
+            }
+            item = new ItemStack(material);
+        }
+
+        Integer customModelData = null;
+        if (guiConfig.contains(path + ".model-data")) {
+            customModelData = guiConfig.getInt(path + ".model-data");
+        }
+
+        int amount = guiConfig.getInt(path + ".amount", 1);
+        if (amount <= 0 || amount >= 64) {
+            amount = 1;
+        }
+        item.setAmount(amount);
+
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta != null) {
+            String name = guiConfig.getString(path + ".name", "");
+            meta.setDisplayName(Colorizer.color(replacePlaceholders(player, name, inv)));
+
+            List<String> lore = guiConfig.getStringList(path + ".lore");
+            if (!lore.isEmpty()) {
+                meta.setLore(Colorizer.colorizeAll(replacePlaceholders(player, lore, inv)));
+            }
+            if (customModelData != null) {
+                ModelDataUtil.setModelData(meta, customModelData);
+            }
+
+            List<ItemFlag> itemFlags = new ArrayList<>();
+            for (String s : guiConfig.getStringList(path + ".item-flags")) {
+                try {
+                    itemFlags.add(ItemFlag.valueOf(s.toUpperCase()));
+                } catch (IllegalArgumentException ex) {
+                    plugin.getLogger().warning("Неизвестный ItemFlag: " + s);
+                }
+            }
+            meta.addItemFlags(itemFlags.toArray(new ItemFlag[0]));
+
+            item.setItemMeta(meta);
+        }
+
+        ConfigurationSection enchantsSection = guiConfig.getConfigurationSection(path + ".enchants");
+        if (enchantsSection != null) {
+            for (String enchantName : enchantsSection.getKeys(false)) {
+                try {
+                    int level = enchantsSection.getInt(enchantName);
+                    Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantName.toLowerCase()));
+                    if (enchantment == null) {
+                        plugin.getLogger().warning(plugin.getMessageConfig().getConsoleMenuUnknownEnchant()
+                                .replace("{menu}", getMenuId())
+                                .replace("{item}", itemId)
+                                .replace("{enchant}", enchantName));
+                        continue;
+                    }
+                    if (level <= 0) {
+                        plugin.getLogger().warning(plugin.getMessageConfig().getConsoleMenuInvalidEnchantLevel()
+                                .replace("{menu}", getMenuId())
+                                .replace("{item}", itemId)
+                                .replace("{level}", String.valueOf(level)));
+                        continue;
+                    }
+                    item.addUnsafeEnchantment(enchantment, level);
+                } catch (Exception e) {
+                    plugin.getLogger().warning(plugin.getMessageConfig().getConsoleMenuEnchantError()
+                            .replace("{menu}", getMenuId())
+                            .replace("{enchant}", enchantName)
+                            .replace("{level}", String.valueOf(enchantsSection.getInt(enchantName, -1)))
+                            .replace("{item}", itemId)
+                            .replace("{error}", e.getMessage()));
+                }
+            }
+        }
+
+        return item;
     }
 
 
@@ -74,9 +342,9 @@ public abstract class AbstractMenu {
         slotToItemId.clear();
         updatableItems.clear();
 
-        IntList specialSlots = parseSlotList(guiConfig.getStringList("special-slots"));
-        this.specialSlots = new IntArrayList(specialSlots);
-        Set<Integer> usedSlots = new HashSet<>(specialSlots);
+        IntList specialSlotsList = parseSlotList(guiConfig.getStringList("special-slots"));
+        this.specialSlots = new IntArrayList(specialSlotsList);
+        Set<Integer> usedSlots = new HashSet<>(specialSlotsList);
         ConfigurationSection itemsSection = guiConfig.getConfigurationSection("items");
 
         if (itemsSection != null) {
@@ -96,7 +364,7 @@ public abstract class AbstractMenu {
                                 .replace("{max}", String.valueOf(inv.getSize() - 1)));
                         continue;
                     }
-                    if (specialSlots.contains(slot) || usedSlots.contains(slot)) {
+                    if (specialSlotsList.contains(slot) || usedSlots.contains(slot)) {
                         slotsToRemove.add(slot);
                         plugin.getLogger().warning(plugin.getMessageConfig().getConsoleMenuSlotOccupied()
                                 .replace("{menu}", getMenuId())
@@ -139,28 +407,21 @@ public abstract class AbstractMenu {
                     customModelData = guiConfig.getInt(path + ".model-data");
                 }
 
-
                 int amount = guiConfig.getInt(path + ".amount", 1);
                 if (amount <= 0 || amount >= 64) {
                     amount = 1;
                 }
                 item.setAmount(amount);
 
-
-
                 ItemMeta meta = item.getItemMeta();
 
                 if (meta != null) {
                     String name = guiConfig.getString(path + ".name", "");
-                    meta.setDisplayName(Colorizer
-                            .color
-                                    (replacePlaceholders(player, name, inv)));
+                    meta.setDisplayName(Colorizer.color(replacePlaceholders(player, name, inv)));
 
                     List<String> lore = guiConfig.getStringList(path + ".lore");
                     if (!lore.isEmpty()) {
-                        meta.setLore(Colorizer
-                                .colorizeAll
-                                        (replacePlaceholders(player, lore, inv)));
+                        meta.setLore(Colorizer.colorizeAll(replacePlaceholders(player, lore, inv)));
                     }
                     if (customModelData != null) {
                         ModelDataUtil.setModelData(meta, customModelData);
@@ -179,7 +440,6 @@ public abstract class AbstractMenu {
                     meta.addItemFlags(
                             itemFlags.toArray(new ItemFlag[0])
                     );
-
 
                     item.setItemMeta(meta);
                 }
@@ -226,35 +486,30 @@ public abstract class AbstractMenu {
                         updatableItems.put(slot, new UpdatableItem(slot, name, lore));
                     }
                 }
-                usedSlots.addAll(validSlots);
             }
         }
     }
 
 
-    protected void runMainActions(Player player, String cmdLine) {
-        String cmd = cmdLine.trim();
+    protected void onAnimationComplete(Player player, Inventory inv) {
+        // Override in subclasses to run logic after animation finishes
+    }
 
-        if (!cmd.startsWith("[")) {
+
+    protected void runMainActions(Player player, String cmd) {
+        if (cmd == null || cmd.isEmpty()) return;
+
+        int bracketEnd = cmd.indexOf(']');
+        if (bracketEnd == -1 || cmd.charAt(0) != '[') {
             player.sendMessage(Colorizer.color(cmd));
             return;
         }
 
-        int end = cmd.indexOf(']');
-        if (end == -1) {
-            player.sendMessage(Colorizer.color(cmd));
-            return;
-        }
+        String type = cmd.substring(1, bracketEnd).toLowerCase();
+        if (type.isEmpty()) return;
+        String value = cmd.length() > bracketEnd + 1 ? cmd.substring(bracketEnd + 1).trim() : "";
 
-        String action = cmd.substring(1, end).toLowerCase();
-        String value = cmd.substring(end + 1).trim();
-
-        switch (action) {
-            case "console" -> {
-                value = PlaceholderAPI.setPlaceholders(player, value);
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), value);
-            }
-
+        switch (type) {
             case "close" -> player.closeInventory();
 
             case "player" -> {
@@ -263,6 +518,11 @@ public abstract class AbstractMenu {
             }
 
             case "text" -> {
+                value = PlaceholderAPI.setPlaceholders(player, Colorizer.color(value));
+                player.sendMessage(value);
+            }
+
+            case "message" -> {
                 value = PlaceholderAPI.setPlaceholders(player, Colorizer.color(value));
                 player.sendMessage(value);
             }
@@ -340,9 +600,9 @@ public abstract class AbstractMenu {
     }
 
 
-
     public void closeMenu(Player player, InventoryCloseEvent e) {
         cancelItemUpdates(player);
+        cancelAnimation(player.getUniqueId());
     }
 
     public void handleClick(Player player, InventoryClickEvent e) {
@@ -354,6 +614,12 @@ public abstract class AbstractMenu {
         Inventory menuInv = e.getInventory();
 
         if (clickedInv != menuInv || rawSlot >= menuInv.getSize()) return;
+
+        // Block all clicks during animation to prevent bugs
+        if (isAnimating(player.getUniqueId())) {
+            e.setCancelled(true);
+            return;
+        }
 
         if (specialSlots.contains(rawSlot) && handleSpecialSlotClick(player, e)) {
             return;
@@ -513,7 +779,6 @@ public abstract class AbstractMenu {
     protected IntList slotORslots(String path) {
         IntList slots = new IntArrayList();
 
-
         int slot = guiConfig.getInt(path + ".slot", -1);
         if (slot != -1) {
             slots.add(slot);
@@ -523,7 +788,6 @@ public abstract class AbstractMenu {
         if (guiConfig.isList(path + ".slots")) {
             List<?> slotsConfig = guiConfig.getList(path + ".slots");
             if (!slotsConfig.isEmpty() && slotsConfig.get(0) instanceof String) {
-
                 slots.addAll(parseSlotList((List<String>) slotsConfig));
             } else {
                 slots.addAll(guiConfig.getIntegerList(path + ".slots"));

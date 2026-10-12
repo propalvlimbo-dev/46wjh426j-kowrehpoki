@@ -1,68 +1,151 @@
-#                 .__               .__
-# _______  ______ |  |  __ __  ____ |__| ____   ______
-# \_  __ \ \____ \|  | |  |  \/ ___\|  |/    \ /  ___/
-#  |  | \/ |  |_> >  |_|  |  / /_/  >  |   |  \\___ \
-#  |__|    |   __/|____/____/\___  /|__|___|  /____  >
-#          |__|             /_____/         \/     \/
-#
-
-
-
-# Нужна помощь или хочешь узнавать и предлагать идеи для обновлений?
-# Вики плагина: https://reqqpe.gitbook.io/rseller
-# ДС: https://dsc.gg/rplugins
-
-
-# Какое меню будет открывать команда /<buyer|seller|sell>
-sell-command: "mainGUI" # Такие же названия как у GUI файлов (allSellGUI, mainGUI, autoSellGUI)
+sell-command: "mainGUI"
 
 metrics: true
 update-check: true
 
 economy:
-  type: VAULT # VAULT, COINSENGINE или PLAYERPOINTS
+  type: VAULT
   coinsengine:
     currency-name: money
 
-
-registered-menus: # Название файла без .yml
+registered-menus:
   - mainGUI
-# Срабатывает при подборе предмета, продаётся лишь тот предмет который подобрался
+
 autosell:
-  enable: true # Переключение работает только при перезагрузке сервера
-  message-settings: # Как будет отправляться сообщение
-    # Переключение работает только при перезагрузке сервера
-    type: sell # sell(при продажи) или же task(раз в какое-то время)
-    send-type: message # message, actionbar
-    task-delay: 5 # в секундах(работает если type = task)
+  enable: true
+  message-settings:
+    type: sell
+    send-type: actionbar
+    task-delay: 5
   settings:
-    # Переключение работает только при перезагрузке сервера
-    type: pickup # pickup(вызывается при подборе) или task(каждый игрок проверяется раз в какое-то время)
-    sell-inventory: false # продавать инвентарь или подобранный предмет(работает если type = pickup)
-    task-delay: 5 # в секундах(работает если type = task)
-  type-list: false # false - чёрный список миров, true - белый список миров
-  worlds-list: # Список, миров настраивается параметром type-list
+    type: pickup
+    sell-inventory: false
+    task-delay: 5
+  type-list: false
+  worlds-list:
     - spawn
-  start_category: example # Категория, которая будет открываться при первом открытие
+  start_category: ores
   categories:
     all:
-      name: "Все предметы"
+      name: "&#F8BEFBВсе предметы"
       items:
         - all
-    example:
-      name: "Ресурсы"
+    ores:
+      name: "&#F8BEFBРуды"
       items:
         - COAL
+        - RAW_COAL
         - LAPIS_LAZULI
+        - REDSTONE
+        - GLOWSTONE_DUST
+        - QUARTZ
+        - AMETHYST_SHARD
         - IRON_INGOT
+        - RAW_IRON
         - GOLD_INGOT
+        - RAW_GOLD
+        - COPPER_INGOT
+        - RAW_COPPER
         - DIAMOND
         - EMERALD
         - NETHERITE_INGOT
+        - NETHERITE_SCRAP
+        - ANCIENT_DEBRIS
+        - OBSIDIAN
+        - CRYING_OBSIDIAN
+        - COAL_BLOCK
+        - IRON_BLOCK
+        - GOLD_BLOCK
+        - DIAMOND_BLOCK
+        - EMERALD_BLOCK
+        - LAPIS_BLOCK
+        - REDSTONE_BLOCK
+        - COPPER_BLOCK
+        - NETHERITE_BLOCK
+        - AMETHYST_BLOCK
+        - COBBLESTONE
+        - ANDESITE
+        - DIORITE
+        - GRANITE
+        - DEEPSLATE
+        - COBBLED_DEEPSLATE
+        - SAND
+        - RED_SAND
+        - CLAY_BALL
+        - GRAVEL
+        - BLACKSTONE
+        - BASALT
+        - CALCITE
+        - TUFF
+        - POINTED_DRIPSTONE
+        - NETHER_BRICK
+        - END_STONE
+    mobs:
+      name: "&#F8BEFBМобы"
+      items:
+        - ROTTEN_FLESH
+        - BONE
+        - ARROW
+        - GUNPOWDER
+        - STRING
+        - SPIDER_EYE
+        - ENDER_PEARL
+        - BLAZE_ROD
+        - BLAZE_POWDER
+        - MAGMA_CREAM
+        - SLIME_BALL
+        - PHANTOM_MEMBRANE
+        - PRISMARINE_SHARD
+        - PRISMARINE_CRYSTALS
+        - SHULKER_SHELL
+        - ECHO_SHARD
+        - DISC_FRAGMENT_5
+        - SCULK_CATALYST
+        - GHAST_TEAR
+        - LEATHER
+        - BEEF
+        - PORKCHOP
+        - MUTTON
+        - WHITE_WOOL
+        - FEATHER
+        - CHICKEN
+        - EGG
+        - RABBIT
+        - RABBIT_HIDE
+        - INK_SAC
+        - GLOW_INK_SAC
+        - HONEYCOMB
+        - SCUTE
+        - TOTEM_OF_UNDYING
+        - WITHER_SKELETON_SKULL
+        - SKELETON_SKULL
+        - ZOMBIE_HEAD
+        - CREEPER_HEAD
+        - DRAGON_HEAD
+        - PIGLIN_HEAD
+        - BREEZE_ROD
+        - WIND_CHARGE
+    misc:
+      name: "&#F8BEFBРазное"
+      items:
+        - NETHER_STAR
+        - DRAGON_EGG
+        - DRAGON_BREATH
+        - ELYTRA
+        - HEART_OF_THE_SEA
+        - NAUTILUS_SHELL
+        - TRIDENT
+        - SPONGE
+        - RABBIT_FOOT
+        - HEAVY_CORE
+        - MACE
+        - OMINOUS_TRIAL_KEY
+        - TRIAL_KEY
+        - SADDLE
+        - GOLDEN_APPLE
+        - ENCHANTED_GOLDEN_APPLE
+
 numbers_format:
-  # Формат чисел: %.Nf где N — количество знаков после запятой
-  # Добавь ~ в конец чтобы убрать лишние нули: 20.00 -> 20, 20.10 -> 20.1
-  # Примеры: "%.2f" -> 20.00 | "%.2f~" -> 20 | "%.1f~" -> 20.5
   placeholders:
     points: "%.2f~"
     points_needed: "%.2f~"
@@ -79,39 +162,24 @@ numbers_format:
     points: "%.2f~"
     coins: "%.2f~"
 
-
-# Бустеры по пермишенам rseller.booster.<key>
 boosters:
-
-  # Не забывайте, если вы укажите donate.vip, то конфигурация будет не правильная (так работает yaml)
-  # Так же если у вас все права, то значит и все бустеры (что не странно потому что они же работают на правах)
-
-  
-  donate: # Пермишен rseller.booster.donate
-    coin-multiplier: 2.0 # Если не указывать, то изначально 1.0
-    point-multiplier: 2.0 # Если не указывать, то изначально 1.0
-
-  booster-coin: # rseller.booster.booster-coin
+  elytrix:
+    coin-multiplier: 3.0
+    point-multiplier: 3.0
+  vip:
+    coin-multiplier: 2.0
+    point-multiplier: 2.0
+  premium:
     coin-multiplier: 1.5
-
-  booster-point:
     point-multiplier: 1.5
 
-# Звуки при событиях продажи
-# Оставь название звука пустым ("") чтобы отключить его
-# Полный список звуков: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
 sounds:
-  # Звук при успешной продаже через меню
   sell: "ENTITY_EXPERIENCE_ORB_PICKUP"
   sell-volume: 1.0
   sell-pitch: 1.0
-
-  # Звук при автопродаже
   autosell: "ENTITY_EXPERIENCE_ORB_PICKUP"
   autosell-volume: 1.0
   autosell-pitch: 1.2
-
-  # Звук когда нечего продавать
   no-sell: "BLOCK_NOTE_BLOCK_BASS"
   no-sell-volume: 1.0
   no-sell-pitch: 1.0
