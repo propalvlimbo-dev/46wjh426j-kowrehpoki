@@ -1,15 +1,12 @@
 package my.reqqpe.rseller.menu;
 
-
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import me.clip.placeholderapi.PlaceholderAPI;
 import my.reqqpe.rseller.Main;
 import my.reqqpe.rseller.managers.NumberFormatManager;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -19,31 +16,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SellMenu extends AbstractMenu implements org.bukkit.event.Listener {
+public class SellMenu extends AbstractMenu {
     private final NumberFormatManager numberFormatManager;
 
 
     public SellMenu(Main plugin) {
         super(plugin);
         numberFormatManager = plugin.getFormatManager();
-    }
-
-    @org.bukkit.event.EventHandler
-    public void onShiftClickToMenu(org.bukkit.event.inventory.InventoryClickEvent e) {
-        if (!(e.getWhoClicked() instanceof Player player)) return;
-        if (!(e.getInventory().getHolder() instanceof CustomInventoryHolder holder)) return;
-        if (!holder.id().equals(getMenuId())) return;
-
-        // Обрабатываем shift-click из инвентаря игрока в special-slots меню
-        if (e.isShiftClick() && e.getClickedInventory() == player.getInventory()) {
-            ItemStack item = e.getCurrentItem();
-            if (item == null || item.getType() == Material.AIR) return;
-
-            // Проверяем что предмет зарегистрирован
-            if (plugin.getItemManager().search(item) == null) {
-                e.setCancelled(true);
-            }
-        }
     }
 
 
@@ -97,19 +76,36 @@ public class SellMenu extends AbstractMenu implements org.bukkit.event.Listener 
         return replaced;
     }
 
+    /**
+     * Единственное разрешённое перемещение предмета внутрь скупщика — shift-клик
+     * по своему инвентарю, и только если предмет зарегистрирован в items.yml.
+     * Забрать предмет из скупщика нельзя никаким способом: он вернётся игроку
+     * сам при закрытии меню.
+     */
+    @Override
+    public boolean allowDepositFromPlayerInventory(Player player, InventoryClickEvent e) {
+        ItemStack item = e.getCurrentItem();
+        if (!hasItem(item)) return false;
+
+        return plugin.getItemManager().search(item) != null;
+    }
+
     @Override
     public void closeMenu(Player player, InventoryCloseEvent e) {
         Inventory inv = e.getInventory();
 
-        for (int slot : specialSlots) {
+        // Возвращаем игроку всё, что он положил в скупщика.
+        // Кнопки меню (slotToItemId) не отдаём никогда.
+        for (int slot = 0; slot < inv.getSize(); slot++) {
+            if (slotToItemId.containsKey(slot)) continue;
+
             ItemStack item = inv.getItem(slot);
-            if (item != null && item.getType() != Material.AIR) {
-                HashMap<Integer, ItemStack> leftovers = player.getInventory().addItem(item);
-                for (ItemStack leftover : leftovers.values()) {
-                    player.getWorld().dropItemNaturally(player.getLocation(), leftover);
-                }
-            }
+            if (!hasItem(item)) continue;
+
+            inv.setItem(slot, null);
+            giveOrDrop(player, item);
         }
+
         super.closeMenu(player, e);
     }
 
@@ -117,31 +113,36 @@ public class SellMenu extends AbstractMenu implements org.bukkit.event.Listener 
     protected boolean handleSpecialSlotClick(Player player, InventoryClickEvent e) {
         int rawSlot = e.getRawSlot();
 
-        if (specialSlots.contains(rawSlot)) {
-            // Проверяем попытку размещения предмета из инвентаря игрока
-            ItemStack cursor = e.getCursor();
-            ItemStack current = e.getCurrentItem();
-            boolean hasCursor = cursor != null && cursor.getType() != Material.AIR;
-            boolean hasCurrent = current != null && current.getType() != Material.AIR;
+        if (!specialSlots.contains(rawSlot)) return false;
 
-            // Разрешаем размещение только в пустой слот из курсора (обычный клик)
-            if (hasCursor && !hasCurrent && !e.isShiftClick()) {
-                // Проверяем что предмет зарегистрирован
-                if (plugin.getItemManager().search(cursor) != null) {
-                    e.setCancelled(false);
-                } else {
-                    e.setCancelled(true);
-                }
-            } else {
-                // Всё остальное блокируем
-                e.setCancelled(true);
-            }
-            return true;
-        }
+        // По умолчанию всё запрещено: забрать предмет из скупщика нельзя
+        // ни обычным кликом, ни shift-кликом, ни номером хотбара, ни Q, ни F.
+        e.setCancelled(true);
 
-        return false;
+        // shift-клик — это перенос в меню, им занимается allowDepositFromPlayerInventory
+        if (e.isShiftClick()) return true;
+
+        // Обычный клик: разрешаем только ПОЛОЖИТЬ предмет из курсора в пустую ячейку
+        ItemStack cursor = e.getCursor();
+        ItemStack current = e.getCurrentItem();
+
+        if (!hasItem(cursor)) return true;                              // курсор пуст — предмет не отдаём
+        if (hasItem(current)) return true;                              // ячейка занята — предметы не меняем
+        if (plugin.getItemManager().search(cursor) == null) return true; // предмет не продаётся — не принимаем
+
+        // Единственное исключение из полной блокировки — положить предмет в скупщика
+        e.setCancelled(false);
+        return true;
     }
 
+    private void giveOrDrop(Player player, ItemStack item) {
+        HashMap<Integer, ItemStack> leftovers = player.getInventory().addItem(item);
+        for (ItemStack leftover : leftovers.values()) {
+            player.getWorld().dropItemNaturally(player.getLocation(), leftover);
+        }
+    }
+
+    @Override
     protected void executeAction(Player player, String action) {
         if (action.equalsIgnoreCase("[sell]")) {
             Inventory inv = player.getOpenInventory().getTopInventory();

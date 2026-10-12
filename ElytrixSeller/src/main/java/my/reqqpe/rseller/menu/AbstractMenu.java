@@ -619,7 +619,7 @@ public abstract class AbstractMenu {
         Inventory clickedInv = e.getClickedInventory();
         Inventory menuInv = e.getInventory();
 
-        if (clickedInv != menuInv || rawSlot >= menuInv.getSize()) return;
+        if (clickedInv != menuInv || rawSlot < 0 || rawSlot >= menuInv.getSize()) return;
 
         // Block all clicks during animation to prevent bugs
         if (isAnimating(player.getUniqueId())) {
@@ -628,34 +628,17 @@ public abstract class AbstractMenu {
         }
 
         // === ПОЛНАЯ БЛОКИРОВКА ИЗВЛЕЧЕНИЯ ПРЕДМЕТОВ ИЗ МЕНЮ ===
-        // Для всех меню кроме allSellGUI — полностью блокируем любые действия с предметами
-        if (!getMenuId().equals("allSellGUI")) {
-            // Проверяем пытается ли игрок взять предмет
-            ItemStack current = e.getCurrentItem();
-            ItemStack cursor = e.getCursor();
-            boolean hasCurrent = current != null && current.getType() != Material.AIR;
-            boolean hasCursor = cursor != null && cursor.getType() != Material.AIR;
-
-            // Блокируем если пытается взять предмет (в руке пусто, в слоте есть)
-            // или пытается поменять (в руке есть, в слоте есть)
-            if (hasCurrent) {
-                e.setCancelled(true);
-                return;
-            }
-
-            // Если слот пустой и в руке есть предмет — разрешаем размещение
-            // но только для кнопок меню, не для функциональных слотов
-            if (!hasCurrent && hasCursor) {
-                e.setCancelled(true);
-                return;
-            }
-        }
+        // Любой клик по меню отменяем ДО логики меню: забрать предмет нельзя
+        // ни обычным кликом, ни shift-кликом, ни номером хотбара, ни Q, ни F,
+        // ни двойным кликом, ни драгом. Кнопки меню при этом продолжают работать.
+        // Разрешить перемещение предмета может только само меню — точечно,
+        // в handleSpecialSlotClick() и только для того, чтобы ПОЛОЖИТЬ предмет
+        // (allSellGUI: скупщик принимает предмет, но никогда не отдаёт его назад).
+        e.setCancelled(true);
 
         if (specialSlots.contains(rawSlot) && handleSpecialSlotClick(player, e)) {
             return;
         }
-
-        e.setCancelled(true);
 
         String itemId = slotToItemId.get(rawSlot);
         if (itemId == null) return;
@@ -737,6 +720,20 @@ public abstract class AbstractMenu {
     protected boolean handleSpecialSlotClick(Player player, InventoryClickEvent e) {
         e.setCancelled(true);
         return false;
+    }
+
+    /**
+     * Разрешено ли класть предметы игрока внутрь меню (shift-клик по инвентарю игрока).
+     * По умолчанию — запрещено: из меню/в меню предметы не перемещаются.
+     * Единственное исключение — скупщик allSellGUI, который принимает предметы на продажу,
+     * но всё равно не отдаёт их обратно.
+     */
+    public boolean allowDepositFromPlayerInventory(Player player, InventoryClickEvent e) {
+        return false;
+    }
+
+    protected static boolean hasItem(ItemStack item) {
+        return item != null && item.getType() != Material.AIR;
     }
 
 

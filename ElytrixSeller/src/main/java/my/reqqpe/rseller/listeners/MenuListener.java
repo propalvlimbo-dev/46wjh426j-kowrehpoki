@@ -4,16 +4,38 @@ import my.reqqpe.rseller.Main;
 import my.reqqpe.rseller.managers.MenuManager;
 import my.reqqpe.rseller.menu.AbstractMenu;
 import my.reqqpe.rseller.menu.CustomInventoryHolder;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
 
+/**
+ * Полная защита меню ElytrixSeller.
+ * <p>
+ * Забрать предмет из меню нельзя НИКАКИМ способом:
+ * <ul>
+ *     <li>обычный клик (забрать в курсор);</li>
+ *     <li>shift-клик (быстрый перенос в инвентарь);</li>
+ *     <li>клик номером хотбара 1-9;</li>
+ *     <li>клавиша Q / Ctrl+Q (выброс предмета);</li>
+ *     <li>клавиша F (обмен с офф-хендом);</li>
+ *     <li>двойной клик (сбор одинаковых предметов в курсор);</li>
+ *     <li>перетаскивание (drag / shift-drag);</li>
+ *     <li>воронки, дропперы и любой другой InventoryMoveItem.</li>
+ * </ul>
+ * Кнопки меню при этом продолжают работать, а в скупщика (allSellGUI)
+ * предмет можно только ПОЛОЖИТЬ — обратно забрать нельзя, он вернётся
+ * сам при закрытии меню.
+ */
 public class MenuListener implements Listener {
 
     private final Main plugin;
@@ -24,66 +46,84 @@ public class MenuListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent e) {
-        if (!(e.getWhoClicked() instanceof Player)) return;
-        if (!(e.getInventory().getHolder() instanceof CustomInventoryHolder holder)) return;
+        if (!(e.getWhoClicked() instanceof Player player)) return;
 
-        String id = holder.id();
-        AbstractMenu menu = MenuManager.getMenu(id);
-        if (menu == null) return;
+        InventoryView view = e.getView();
+        Inventory top = view.getTopInventory();
+        if (!(top.getHolder() instanceof CustomInventoryHolder holder)) return;
 
-        Player player = (Player) e.getWhoClicked();
-        Inventory menuInv = e.getInventory();
-        Inventory clickedInv = e.getClickedInventory();
+        AbstractMenu menu = MenuManager.getMenu(holder.id());
 
-        // === ПОЛНАЯ БЛОКИРОВКА ИЗВЛЕЧЕНИЯ ИЗ МЕНЮ ===
-
-        // 1. Shift-click из верхнего инвентаря (меню) в инвентарь игрока — ВСЕГДА блокируем
-        if (e.isShiftClick() && clickedInv == menuInv) {
+        // 1. Двойной клик / сбор в курсор — ваниль собирает одинаковые предметы
+        //    со всего открытого окна, в том числе из меню. Блокируем всегда.
+        ClickType click = e.getClick();
+        if (click == ClickType.COLLECT_TO_CURSOR || click == ClickType.DOUBLE_CLICK) {
             e.setCancelled(true);
             return;
         }
 
-        // 2. Обычный клик по верхнему инвентарю — пусть обработает меню,
-        //    но handleSpecialSlotClick сам решит что разрешить
-        if (clickedInv == menuInv) {
-            menu.handleClick(player, e);
-            return;
-        }
+        Inventory clicked = e.getClickedInventory();
 
-        // 3. Shift-click из инвентаря игрока в меню — только для allSellGUI в special-slots
-        if (e.isShiftClick() && clickedInv == player.getInventory()) {
-            if (!id.equals("allSellGUI")) {
-                e.setCancelled(true);
+        int rawSlot = e.getRawSlot();
+        // Клик по меню = либо верхний инвентарь, либо любой слот из его диапазона
+        boolean clickedTop = clicked != null
+                && (clicked.equals(top) || (rawSlot >= 0 && rawSlot < top.getSize()));
+        // Всё остальное внутри окна — инвентарь игрока
+        boolean clickedBottom = clicked != null && !clickedTop;
+
+        // 2. Клик по самому меню (верхний инвентарь) — любое перемещение предметов запрещено.
+        if (clickedTop) {
+            // Отменяем перемещение предмета ДО обработки меню: так предмет не «уйдёт»
+            // ни в курсор, ни в инвентарь игрока. Кнопки при этом работают.
+            e.setCancelled(true);
+            if (menu != null) {
+                menu.handleClick(player, e);
             }
-            // Для allSellGUI — пусть обработает handleClick который проверит special-slots
             return;
         }
 
-        // 4. Обычный клик по инвентарю игрока при открытом меню — блокируем (чтобы не вытащить курсором)
-        if (clickedInv == player.getInventory() && e.getCursor() != null && e.getCursor().getType().name().endsWith("_HEAD")) {
-            e.setCancelled(true);
+        // 3. Клик по инвентарю игрока, пока открыто меню.
+        if (clickedBottom) {
+            switch (click) {
+                // Быстрый перенос (shift-клик) — предмет уходит в меню.
+                // Разрешаем только меню, которое явно принимает предметы (allSellGUI).
+                case MOVE_TO_OTHER_INVENTORY -> {
+                    if (menu == null || !menu.allowDepositFromPlayerInventory(player, e)) {
+                        e.setCancelled(true);
+                    }
+                }
+                // Номер хотбара / офф-хенд при непустом курсоре могут затащить предмет в меню.
+                case HOTBAR_SWAP, HOTBAR_MOVE_AND_READD, SWAP_OFFHAND -> {
+                    if (hasItem(e.getCursor())) {
+                        e.setCancelled(true);
+                    }
+                }
+                default -> {
+                }
+            }
+            return;
         }
+
+        // 4. Клик мимо инвентаря (выброс предмета из-под курсора) — тоже запрещаем,
+        //    чтобы предмет гарантированно не покинул меню.
+        e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInventoryDrag(InventoryDragEvent e) {
         if (!(e.getWhoClicked() instanceof Player)) return;
-        if (!(e.getInventory().getHolder() instanceof CustomInventoryHolder holder)) return;
 
-        AbstractMenu menu = MenuManager.getMenu(holder.id());
-        if (menu == null) return;
+        InventoryView view = e.getView();
+        if (!(view.getTopInventory().getHolder() instanceof CustomInventoryHolder)) return;
 
-        // Блокируем drag в верхнем инвентаре (меню)
-        for (int rawSlot : e.getRawSlots()) {
-            if (rawSlot < e.getInventory().getSize()) {
-                e.setCancelled(true);
-                return;
-            }
-        }
+        // Любой драг при открытом меню запрещён: часть ячеек может оказаться в меню,
+        // а shift-драг умеет вытаскивать предметы из меню в инвентарь игрока.
+        e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInventoryMoveItem(InventoryMoveItemEvent e) {
+        // Воронки, дропперы, хопперы и т.п. не могут трогать меню
         if (e.getSource().getHolder() instanceof CustomInventoryHolder) {
             e.setCancelled(true);
         }
@@ -100,5 +140,9 @@ public class MenuListener implements Listener {
 
         Player player = (Player) e.getPlayer();
         menu.closeMenu(player, e);
+    }
+
+    private static boolean hasItem(ItemStack item) {
+        return item != null && item.getType() != Material.AIR;
     }
 }
