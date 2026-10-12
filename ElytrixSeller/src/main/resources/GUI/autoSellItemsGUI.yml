@@ -14,12 +14,12 @@ autosell_item:
   name: "&7« &#F8BEFB{item_name} &7»"
   autosell-enchanted: true
   lore:
-    - '&#F8BEFB&l┃ '
+    - '&#F8BEFB&l '
     - '&#F8BEFB&l┃ &fСтатус: &#F8BEFB{state_autosell}'
-    - '&#F8BEFB&l┃ '
+    - '&#F8BEFB&l '
     - '&#F8BEFB&l┃ &fЦена продажи: &#F8BEFB{sell_price}$'
-    - '&#F8BEFB&l┃ &fОчки за продажу: &#F8BEFB{sell_points}'
-    - '&#F8BEFB&l┃ '
+    - '&#F8BEFB&l &fОчки за продажу: &#F8BEFB{sell_points}'
+    - '&#F8BEFB&l '
     - '&7● &fНажмите для переключения'
 
 items:
@@ -28,9 +28,9 @@ items:
     name: "&7« &#F8BEFB{current_category} &7»"
     slot: 4
     lore:
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fКатегория: &#F8BEFB{current_category}'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&7● &fЛКМ — предыдущая &8| &fПКМ — следующая'
     left_click_actions:
       - '[switch_category] -1'
@@ -43,8 +43,8 @@ items:
     slot: 48
     lore:
       - '&#F8BEFB&l┃ '
-      - '&#F8BEFB&l┃ &fПредыдущая страница'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l &fПредыдущая страница'
+      - '&#F8BEFB&l '
       - '&7● &fНажмите для перехода'
     left_click_actions:
       - '[prev_page]'
@@ -83,9 +83,9 @@ items:
     material: magma_cream
     name: "&7« &#F8BEFBАвто-скупка категории &7»"
     lore:
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fСтатус: &#F8BEFB{state_autosell_category}'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&7● &fНажмите для переключения'
     slot: 53
     left_click_actions:
@@ -96,8 +96,8 @@ items:
     name: "&7« &#F8BEFBУведомления &7»"
     lore:
       - '&#F8BEFB&l┃ '
-      - '&#F8BEFB&l┃ &fСтатус: &#F8BEFB{state_autosell_message}'
-      - '&#F8BEFB&l '
+      - '&#F8BEFB&l &fСтатус: &#F8BEFB{state_autosell_message}'
+      - '&#F8BEFB&l┃ '
       - '&7● &fНажмите для переключения'
     slot: 52
     left_click_actions:

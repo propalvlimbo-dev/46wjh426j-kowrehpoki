@@ -17,7 +17,7 @@ items:
     slot: 45
     name: "&7« &#F8BEFBГлавное меню &7»"
     lore:
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fВернуться назад: &#F8BEFBВ главное меню'
       - '&#F8BEFB&l┃ '
       - '&7● &fНажмите для возврата'
@@ -32,7 +32,7 @@ items:
     name: "&7« &#F8BEFBПродать всё &7»"
     slot: 49
     lore:
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fМонеты за продажу: &#F8BEFB{sell_price}'
       - '&#F8BEFB&l┃ &fОчки за продажу: &#F8BEFB{sell_points}'
       - '&#F8BEFB&l┃ '
@@ -48,18 +48,18 @@ items:
     material: BOOK
     name: "&7« &#F8BEFBСистема прокачки &7»"
     lore:
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fElytrixSeller — &fуникальный заработок'
-      - '&#F8BEFB&l┃ &fПродавайте лут — &fпрокачивайте бустеры'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l &fПродавайте лут — &fпрокачивайте бустеры'
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fКак продавать: &#F8BEFBПоложите лут → Продайте'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fВаш уровень: &#F8BEFB%rseller_level%'
       - '&#F8BEFB&l┃ &fПрогресс: &#F8BEFB%rseller_points%/%rseller_points_needed%'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fБустер монет: &#F8BEFBx%rseller_multiplier_coins%'
-      - '&#F8BEFB&l┃ &fБустер очков: &#F8BEFBx%rseller_multiplier_points%'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l &fБустер очков: &#F8BEFBx%rseller_multiplier_points%'
+      - '&#F8BEFB&l '
       - '&7● &fПродавайте больше — зарабатывайте быстрее'
     left_click_actions: []
     right_click_actions: []

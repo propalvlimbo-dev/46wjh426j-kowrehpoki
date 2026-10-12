@@ -34,52 +34,41 @@ autosell:
       name: "&#F8BEFBРуды"
       items:
         - COAL
-        - RAW_COAL
         - LAPIS_LAZULI
         - REDSTONE
         - GLOWSTONE_DUST
         - QUARTZ
-        - AMETHYST_SHARD
         - IRON_INGOT
-        - RAW_IRON
+        - IRON_BLOCK
         - GOLD_INGOT
-        - RAW_GOLD
-        - COPPER_INGOT
-        - RAW_COPPER
+        - GOLD_BLOCK
         - DIAMOND
+        - DIAMOND_BLOCK
         - EMERALD
+        - EMERALD_BLOCK
+        - LAPIS_BLOCK
+        - REDSTONE_BLOCK
+        - COAL_BLOCK
         - NETHERITE_INGOT
         - NETHERITE_SCRAP
         - ANCIENT_DEBRIS
         - OBSIDIAN
         - CRYING_OBSIDIAN
-        - COAL_BLOCK
-        - IRON_BLOCK
-        - GOLD_BLOCK
-        - DIAMOND_BLOCK
-        - EMERALD_BLOCK
-        - LAPIS_BLOCK
-        - REDSTONE_BLOCK
-        - COPPER_BLOCK
-        - NETHERITE_BLOCK
-        - AMETHYST_BLOCK
         - COBBLESTONE
         - ANDESITE
         - DIORITE
         - GRANITE
-        - DEEPSLATE
-        - COBBLED_DEEPSLATE
         - SAND
         - RED_SAND
         - CLAY_BALL
         - GRAVEL
         - BLACKSTONE
         - BASALT
-        - CALCITE
-        - TUFF
-        - POINTED_DRIPSTONE
         - NETHER_BRICK
         - END_STONE
+        - GLASS_BOTTLE
+        - SUGAR
+        - STICK
     mobs:
       name: "&#F8BEFBМобы"
       items:
@@ -98,9 +87,6 @@ autosell:
         - PRISMARINE_SHARD
         - PRISMARINE_CRYSTALS
         - SHULKER_SHELL
-        - ECHO_SHARD
-        - DISC_FRAGMENT_5
-        - SCULK_CATALYST
         - GHAST_TEAR
         - LEATHER
         - BEEF
@@ -113,7 +99,6 @@ autosell:
         - RABBIT
         - RABBIT_HIDE
         - INK_SAC
-        - GLOW_INK_SAC
         - HONEYCOMB
         - SCUTE
         - TOTEM_OF_UNDYING
@@ -122,9 +107,11 @@ autosell:
         - ZOMBIE_HEAD
         - CREEPER_HEAD
         - DRAGON_HEAD
-        - PIGLIN_HEAD
-        - BREEZE_ROD
-        - WIND_CHARGE
+        - RABBIT_FOOT
+        - TRIDENT
+        - SPONGE
+        - HEART_OF_THE_SEA
+        - NAUTILUS_SHELL
     misc:
       name: "&#F8BEFBРазное"
       items:
@@ -132,18 +119,9 @@ autosell:
         - DRAGON_EGG
         - DRAGON_BREATH
         - ELYTRA
-        - HEART_OF_THE_SEA
-        - NAUTILUS_SHELL
-        - TRIDENT
-        - SPONGE
-        - RABBIT_FOOT
-        - HEAVY_CORE
-        - MACE
-        - OMINOUS_TRIAL_KEY
-        - TRIAL_KEY
-        - SADDLE
         - GOLDEN_APPLE
         - ENCHANTED_GOLDEN_APPLE
+        - SADDLE
 
 numbers_format:
   placeholders:

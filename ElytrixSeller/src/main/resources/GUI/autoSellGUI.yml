@@ -13,9 +13,9 @@ items:
     slot: 11
     lore:
       - '&#F8BEFB&l '
-      - '&#F8BEFB&l┃ &fРуды и минералы'
-      - '&#F8BEFB&l &fБлоки и камень'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l &fРуды и минералы'
+      - '&#F8BEFB&l┃ &fБлоки и камень'
+      - '&#F8BEFB&l '
       - '&7● &fНажмите для перехода'
     left_click_actions:
       - '[open_category] ores'
@@ -27,10 +27,10 @@ items:
     name: "&7« &#F8BEFBМобы &7»"
     slot: 13
     lore:
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fЛут со всех мобов'
       - '&#F8BEFB&l┃ &fВраждебные и мирные'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&7● &fНажмите для перехода'
     left_click_actions:
       - '[open_category] mobs'
@@ -42,7 +42,7 @@ items:
     name: "&7« &#F8BEFBРазное &7»"
     slot: 15
     lore:
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fРедкий лут'
       - '&#F8BEFB&l┃ &fАртефакты и боссы'
       - '&#F8BEFB&l┃ '
@@ -57,10 +57,10 @@ items:
     name: "&7« &cОтключить всё &7»"
     slot: 31
     lore:
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fОтключить автоскупку'
       - '&#F8BEFB&l┃ &fдля всех предметов'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&7● &fНажмите для отключения'
     left_click_actions:
       - '[disable_all_autosell]'
@@ -73,7 +73,7 @@ items:
     lore:
       - '&#F8BEFB&l┃ '
       - '&#F8BEFB&l┃ &fВернуться в главное меню'
-      - '&#F8BEFB&l┃ '
+      - '&#F8BEFB&l '
       - '&7● &fНажмите для возврата'
     slot: 49
     left_click_actions:
