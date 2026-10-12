@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -54,10 +55,12 @@ public class MenuListener implements Listener {
 
         AbstractMenu menu = MenuManager.getMenu(holder.id());
 
+        ClickType click = e.getClick();
+        InventoryAction action = e.getAction();
+
         // 1. Двойной клик / сбор в курсор — ваниль собирает одинаковые предметы
         //    со всего открытого окна, в том числе из меню. Блокируем всегда.
-        ClickType click = e.getClick();
-        if (click == ClickType.COLLECT_TO_CURSOR || click == ClickType.DOUBLE_CLICK) {
+        if (click == ClickType.DOUBLE_CLICK || action == InventoryAction.COLLECT_TO_CURSOR) {
             e.setCancelled(true);
             return;
         }
@@ -84,7 +87,9 @@ public class MenuListener implements Listener {
 
         // 3. Клик по инвентарю игрока, пока открыто меню.
         if (clickedBottom) {
-            switch (click) {
+            // Смотрим не на тип клика, а на действие — оно однозначно описывает
+            // перемещение предметов (shift-клик, номера хотбара, офф-хенд и т.д.).
+            switch (action) {
                 // Быстрый перенос (shift-клик) — предмет уходит в меню.
                 // Разрешаем только меню, которое явно принимает предметы (allSellGUI).
                 case MOVE_TO_OTHER_INVENTORY -> {
@@ -92,8 +97,8 @@ public class MenuListener implements Listener {
                         e.setCancelled(true);
                     }
                 }
-                // Номер хотбара / офф-хенд при непустом курсоре могут затащить предмет в меню.
-                case HOTBAR_SWAP, HOTBAR_MOVE_AND_READD, SWAP_OFFHAND -> {
+                // Номер хотбара при непустом курсоре может затащить предмет в ячейку меню.
+                case HOTBAR_SWAP, HOTBAR_MOVE_AND_READD -> {
                     if (hasItem(e.getCursor())) {
                         e.setCancelled(true);
                     }
@@ -104,9 +109,11 @@ public class MenuListener implements Listener {
             return;
         }
 
-        // 4. Клик мимо инвентаря (выброс предмета из-под курсора) — тоже запрещаем,
-        //    чтобы предмет гарантированно не покинул меню.
-        e.setCancelled(true);
+        // 4. Клик мимо инвентаря (выброс предмета из-под курсора) — запрещаем,
+        //    если под курсором что-то есть, чтобы предмет не покинул меню.
+        if (hasItem(e.getCursor())) {
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
