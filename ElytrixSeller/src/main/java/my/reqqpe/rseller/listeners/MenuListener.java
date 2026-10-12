@@ -30,6 +30,13 @@ public class MenuListener implements Listener {
         if (menu == null) return;
 
         Player player = (Player) e.getWhoClicked();
+
+        // Block shift-click from top inventory (menu) to player inventory
+        if (e.isShiftClick() && e.getClickedInventory() == e.getInventory()) {
+            e.setCancelled(true);
+            return;
+        }
+
         menu.handleClick(player, e);
     }
 
@@ -42,6 +49,7 @@ public class MenuListener implements Listener {
         AbstractMenu menu = MenuManager.getMenu(id);
         if (menu == null) return;
 
+        // Block drag in top inventory (menu)
         for (int rawSlot : e.getRawSlots()) {
             if (rawSlot < e.getInventory().getSize()) {
                 e.setCancelled(true);
