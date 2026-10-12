@@ -10,10 +10,10 @@ items:
   category_ores:
     material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDY3ZDJiYzI3YzQ0YTcxMWExZTJmNDFlYjI4M2RhNTZmZWM5YTNkNmZiOTNhYWZkZmM4NWIxNWNkMThhMjY4MiJ9fX0=
     name: "&7« &#F8BEFBРуды &7»"
-    slot: 12
+    slot: 20
     lore:
       - '&#F8BEFB&l '
-      - '&#F8BEFB&l┃ &fРуды и минералы'
+      - '&#F8BEFB&l &fРуды и минералы'
       - '&#F8BEFB&l┃ &fМеталлы и слитки'
       - '&#F8BEFB&l '
       - '&7● &fНажмите для перехода'
@@ -25,7 +25,7 @@ items:
   category_mobs:
     material: basehead-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDI4ZDlmZjU0MTg4YTFhZmVlNjViOTRmM2JmY2NlMzIxYzY0M2EzNDU5MGMxNGIxOTJiMmUzZWMyZjUyNWQzIn19fQ==
     name: "&7« &#F8BEFBМобы &7»"
-    slot: 14
+    slot: 22
     lore:
       - '&#F8BEFB&l '
       - '&#F8BEFB&l┃ &fЛут со всех мобов'
@@ -40,7 +40,7 @@ items:
   disable_all:
     material: BARRIER
     name: "&7« &cОтключить всё &7»"
-    slot: 31
+    slot: 24
     lore:
       - '&#F8BEFB&l '
       - '&#F8BEFB&l &fОтключить автоскупку'
@@ -66,9 +66,9 @@ items:
     right_click_actions:
       - '[opengui] mainGUI'
 
-  decorate:
-    material: purple_stained_glass_pane
-    name: "&r"
+  design_top:
+    material: black_stained_glass_pane
+    display_name: '&r'
     slots:
       - 0
       - 1
@@ -80,9 +80,16 @@ items:
       - 7
       - 8
       - 9
+      - 10
+      - 16
       - 17
       - 18
       - 26
+
+  design_bottom:
+    material: purple_stained_glass_pane
+    display_name: '&r'
+    slots:
       - 27
       - 35
       - 36
