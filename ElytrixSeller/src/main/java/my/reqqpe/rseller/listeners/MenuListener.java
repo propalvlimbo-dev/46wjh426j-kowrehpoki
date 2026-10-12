@@ -37,6 +37,12 @@ public class MenuListener implements Listener {
             return;
         }
 
+        // Block shift-click from player inventory to menu (except for SellMenu which handles it separately)
+        if (e.isShiftClick() && e.getClickedInventory() == player.getInventory() && !id.equals("allSellGUI")) {
+            e.setCancelled(true);
+            return;
+        }
+
         menu.handleClick(player, e);
     }
 
