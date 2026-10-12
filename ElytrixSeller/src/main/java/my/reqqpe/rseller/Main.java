@@ -258,14 +258,12 @@ public final class Main extends JavaPlugin {
         MenuManager.unRegisterAllMenus();
         menusConfigs.clear();
 
-
         SellMenu sellMenu = new SellMenu(this);
         MenuManager.registerMenu("allSellGUI", sellMenu);
         getServer().getPluginManager().registerEvents(sellMenu, this);
 
         MenuManager.registerMenu("autoSellGUI", new AutoSellCategoryMenu(this));
         MenuManager.registerMenu("autoSellItemsGUI", new AutoSellMenu(this));
-
         SellLogMenu sellLogMenu = new SellLogMenu(this);
         MenuManager.registerMenu("sellLogGUI", sellLogMenu);
 

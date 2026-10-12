@@ -9,9 +9,6 @@ import my.reqqpe.rseller.managers.NumberFormatManager;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -20,13 +17,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SellMenu extends AbstractMenu implements Listener {
+public class SellMenu extends AbstractMenu implements org.bukkit.event.Listener {
     private final NumberFormatManager numberFormatManager;
 
 
     public SellMenu(Main plugin) {
         super(plugin);
         numberFormatManager = plugin.getFormatManager();
+    }
+
+    @org.bukkit.event.EventHandler
+    public void onShiftClickToMenu(org.bukkit.event.inventory.InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player player)) return;
+        if (!(e.getInventory().getHolder() instanceof CustomInventoryHolder holder)) return;
+        if (!holder.id().equals(getMenuId())) return;
+
+        // Обрабатываем shift-click из инвентаря игрока в special-slots меню
+        if (e.isShiftClick() && e.getClickedInventory() == player.getInventory()) {
+            ItemStack item = e.getCurrentItem();
+            if (item == null || item.getType() == Material.AIR) return;
+
+            // Проверяем что предмет зарегистрирован
+            if (plugin.getItemManager().search(item) == null) {
+                e.setCancelled(true);
+            }
+        }
     }
 
 
@@ -118,31 +133,29 @@ public class SellMenu extends AbstractMenu implements Listener {
         int rawSlot = e.getRawSlot();
 
         if (specialSlots.contains(rawSlot)) {
-            // Block ALL interactions with special slots to prevent item extraction
-            e.setCancelled(true);
+            // Проверяем попытку размещения предмета из инвентаря игрока
+            ItemStack cursor = e.getCursor();
+            ItemStack current = e.getCurrentItem();
+            boolean hasCursor = cursor != null && cursor.getType() != Material.AIR;
+            boolean hasCurrent = current != null && current.getType() != Material.AIR;
+
+            // Разрешаем размещение только в пустой слот из курсора (обычный клик)
+            if (hasCursor && !hasCurrent && !e.isShiftClick()) {
+                // Проверяем что предмет зарегистрирован
+                if (plugin.getItemManager().search(cursor) != null) {
+                    e.setCancelled(false);
+                } else {
+                    e.setCancelled(true);
+                }
+            } else {
+                // Всё остальное блокируем
+                e.setCancelled(true);
+            }
             return true;
         }
 
         return false;
     }
-
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        if (!(e.getWhoClicked() instanceof Player player)) return;
-        if (!(e.getInventory().getHolder() instanceof CustomInventoryHolder holder)) return;
-        if (!holder.id().equals(getMenuId())) return;
-
-        // Block shift-click from player inventory to special slots if item is not registered
-        if (e.isShiftClick() && e.getClickedInventory() == player.getInventory()) {
-            ItemStack item = e.getCurrentItem();
-            if (item != null && item.getType() != Material.AIR) {
-                if (plugin.getItemManager().search(item) == null) {
-                    e.setCancelled(true);
-                }
-            }
-        }
-    }
-
 
     protected void executeAction(Player player, String action) {
         if (action.equalsIgnoreCase("[sell]")) {

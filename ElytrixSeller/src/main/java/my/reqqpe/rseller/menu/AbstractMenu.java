@@ -627,6 +627,30 @@ public abstract class AbstractMenu {
             return;
         }
 
+        // === ПОЛНАЯ БЛОКИРОВКА ИЗВЛЕЧЕНИЯ ПРЕДМЕТОВ ИЗ МЕНЮ ===
+        // Для всех меню кроме allSellGUI — полностью блокируем любые действия с предметами
+        if (!getMenuId().equals("allSellGUI")) {
+            // Проверяем пытается ли игрок взять предмет
+            ItemStack current = e.getCurrentItem();
+            ItemStack cursor = e.getCursor();
+            boolean hasCurrent = current != null && current.getType() != Material.AIR;
+            boolean hasCursor = cursor != null && cursor.getType() != Material.AIR;
+
+            // Блокируем если пытается взять предмет (в руке пусто, в слоте есть)
+            // или пытается поменять (в руке есть, в слоте есть)
+            if (hasCurrent) {
+                e.setCancelled(true);
+                return;
+            }
+
+            // Если слот пустой и в руке есть предмет — разрешаем размещение
+            // но только для кнопок меню, не для функциональных слотов
+            if (!hasCurrent && hasCursor) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+
         if (specialSlots.contains(rawSlot) && handleSpecialSlotClick(player, e)) {
             return;
         }
