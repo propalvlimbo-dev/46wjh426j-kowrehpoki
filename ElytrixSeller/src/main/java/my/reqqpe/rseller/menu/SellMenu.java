@@ -7,6 +7,7 @@ import my.reqqpe.rseller.Main;
 import my.reqqpe.rseller.managers.NumberFormatManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -77,17 +78,37 @@ public class SellMenu extends AbstractMenu {
     }
 
     /**
-     * Единственное разрешённое перемещение предмета внутрь скупщика — shift-клик
-     * по своему инвентарю, и только если предмет зарегистрирован в items.yml.
+     * Единственное разрешённое перемещение предмета внутрь скупщика:
+     * <ul>
+     *     <li>shift-клик по своему инвентарю — предмет уходит в скупщика;</li>
+     *     <li>обычный клик курсором в пустую ячейку скупщика.</li>
+     * </ul>
+     * В обоих случаях предмет должен быть зарегистрирован в items.yml.
      * Забрать предмет из скупщика нельзя никаким способом: он вернётся игроку
      * сам при закрытии меню.
      */
     @Override
-    public boolean allowDepositFromPlayerInventory(Player player, InventoryClickEvent e) {
-        ItemStack item = e.getCurrentItem();
-        if (!hasItem(item)) return false;
+    public boolean isDepositAllowed(Player player, InventoryClickEvent e) {
+        Inventory top = e.getView().getTopInventory();
+        int rawSlot = e.getRawSlot();
 
-        return plugin.getItemManager().search(item) != null;
+        // shift-клик по инвентарю игрока — перенос в скупщика
+        if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY
+                && rawSlot >= top.getSize()) {
+            ItemStack item = e.getCurrentItem();
+            return hasItem(item) && plugin.getItemManager().search(item) != null;
+        }
+
+        // клик по ячейке скупщика — курсором в пустую ячейку
+        if (rawSlot >= 0 && rawSlot < top.getSize()
+                && specialSlots.contains(rawSlot)
+                && !hasItem(e.getCurrentItem())
+                && !e.isShiftClick()) {
+            ItemStack cursor = e.getCursor();
+            return hasItem(cursor) && plugin.getItemManager().search(cursor) != null;
+        }
+
+        return false;
     }
 
     @Override
@@ -119,7 +140,7 @@ public class SellMenu extends AbstractMenu {
         // ни обычным кликом, ни shift-кликом, ни номером хотбара, ни Q, ни F.
         e.setCancelled(true);
 
-        // shift-клик — это перенос в меню, им занимается allowDepositFromPlayerInventory
+        // shift-клик — это перенос в меню, им занимается isDepositAllowed
         if (e.isShiftClick()) return true;
 
         // Обычный клик: разрешаем только ПОЛОЖИТЬ предмет из курсора в пустую ячейку

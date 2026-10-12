@@ -134,6 +134,8 @@ public final class Main extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new MenuListener(this), this);
         pm.registerEvents(new DatabaseListener(this,playerRepository, autoSellManager), this);
+        getLogger().info("Защита меню активна (v" + getDescription().getVersion()
+                + "): забрать предметы из меню нельзя ни одним способом.");
 
         getCommand("sell").setExecutor(new SellCommand(this));
 

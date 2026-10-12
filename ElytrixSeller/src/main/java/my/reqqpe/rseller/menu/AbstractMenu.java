@@ -723,12 +723,11 @@ public abstract class AbstractMenu {
     }
 
     /**
-     * Разрешено ли класть предметы игрока внутрь меню (shift-клик по инвентарю игрока).
-     * По умолчанию — запрещено: из меню/в меню предметы не перемещаются.
-     * Единственное исключение — скупщик allSellGUI, который принимает предметы на продажу,
-     * но всё равно не отдаёт их обратно.
+     * Единственное разрешённое перемещение предметов — ПОЛОЖИТЬ предмет в меню.
+     * По умолчанию запрещено: ни забрать, ни переложить предметы нельзя.
+     * Переопределяют только меню, которые принимают предметы (allSellGUI — скупщик).
      */
-    public boolean allowDepositFromPlayerInventory(Player player, InventoryClickEvent e) {
+    public boolean isDepositAllowed(Player player, InventoryClickEvent e) {
         return false;
     }
 

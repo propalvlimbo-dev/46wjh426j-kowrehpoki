@@ -61,7 +61,7 @@ dependencies {
 }
 
 group = 'my.reqqpe'
-version = '2.0.0-ElytriX'
+version = '2.0.1-ElytriX'
 description = 'ElytrixSeller'
 java.sourceCompatibility = JavaVersion.VERSION_16
 
