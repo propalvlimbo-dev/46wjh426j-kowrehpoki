@@ -9,6 +9,8 @@ import my.reqqpe.rseller.managers.NumberFormatManager;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -60,23 +62,6 @@ public class SellMenu extends AbstractMenu implements org.bukkit.event.Listener 
     @Override
     public void openMenu(Player player) {
         super.openMenu(player);
-    }
-
-    @EventHandler
-    public void onInventoryClickUpdate(InventoryClickEvent e) {
-        if (!(e.getWhoClicked() instanceof Player player)) return;
-        if (!(e.getInventory().getHolder() instanceof CustomInventoryHolder holder)) return;
-        if (!holder.id().equals(getMenuId())) return;
-
-        // Update preview on shift-click from player inventory
-        if (e.isShiftClick() && e.getClickedInventory() == player.getInventory()) {
-            Inventory inv = player.getOpenInventory().getTopInventory();
-            inv.getViewers().forEach(viewer -> {
-                if (viewer instanceof Player p) {
-                    p.updateInventory();
-                }
-            });
-        }
     }
 
     @Override
